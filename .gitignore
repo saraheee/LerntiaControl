@@ -10,6 +10,10 @@ __pycache__/
 */workspace.xml
 */.idea
 
+# Test folder
+test/
+*/test
+
 # Distribution / packaging
 .Python
 build/
