@@ -18,10 +18,7 @@ print("OpenCV Version: ", cv2.__version__, '\n')
 def on_click():
     global started
     if not started:
-        ui.start_button.setText("Pause")
-        started = True
-        print('start button clicked')
-
+        activate_start_button()
         cap = cv2.VideoCapture(0)
 
         while True:
@@ -37,7 +34,7 @@ def on_click():
             h, w, ch = rgb_image.shape
             bytes_per_line = ch * w
             convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-            p = convert_to_qt_format.scaled(w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            p = convert_to_qt_format.scaled(w/3, h/3, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             ui.camera_view.setPixmap(QPixmap(p))
 
             # display mirrored frame in new window
@@ -62,9 +59,17 @@ def activate_pause_button():
     print('pause button clicked')
 
 
+def activate_start_button():
+    global started
+    started = True
+    ui.start_button.setText("Pause")
+    print('start button clicked')
+
+
 class Ui_MainWindow(object):
     def setup_ui(self, main_window):
         main_window.setObjectName("MainWindow")
+        main_window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
 
         self.central_widget = QtWidgets.QWidget(main_window)
         self.central_widget.setObjectName("central_widget")
