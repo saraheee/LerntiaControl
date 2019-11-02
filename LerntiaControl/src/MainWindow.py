@@ -2,9 +2,15 @@
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QLabel
+import cv2
 
 started = False
 ui = 0
+
+print("Welcome to LerntiaControl!")
+print("OpenCV Version: ", cv2.__version__, '\n')
 
 
 class Ui_MainWindow(object):
@@ -19,10 +25,13 @@ class Ui_MainWindow(object):
         self.vertical_layout = QtWidgets.QVBoxLayout()
         self.vertical_layout.setObjectName("vertical_layout")
 
-        self.camera_view = QtWidgets.QGraphicsView(self.central_widget)
+        self.camera_view = QLabel(self.central_widget)
         self.camera_view.setObjectName("camera_view")
         self.vertical_layout.addWidget(self.camera_view)
         self.verticalLayout_2.addLayout(self.vertical_layout)
+        status_img = QPixmap('../ui/green')
+        ui.camera_view.setPixmap(QPixmap(status_img))
+        ui.camera_view.setScaledContents(True)
 
         self.start_button = QtWidgets.QPushButton(self.central_widget)
         font = QtGui.QFont()
@@ -56,7 +65,7 @@ class Ui_MainWindow(object):
         global ui
         ui = self
         _translate = QtCore.QCoreApplication.translate
-        main_window.setWindowTitle(_translate("MainWindow", "LerntiaControl"))
+        main_window.setWindowTitle(_translate("MainWindow", "[LerntiaControl] Hauptfenster"))
         self.start_button.setText(_translate("MainWindow", "Start"))
         self.menu.setTitle(_translate("MainWindow", "Menü"))
         self.do_something.setText(_translate("MainWindow", "Klick"))
@@ -70,11 +79,31 @@ class Ui_MainWindow(object):
         if not started:
             ui.start_button.setText("Pause")
             started = True
-            print('started')
+            print('start button clicked')
+
+            cap = cv2.VideoCapture(0)
+
+            while True:
+                # capture frame
+                ret, frame = cap.read()
+
+                # display frame
+                img = '[LerntiaControl] Kamerabild'
+                cv2.imshow(img, frame)
+
+                # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
+                if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
+                    cap.release()
+                    cv2.destroyAllWindows()
+                    started = False
+                    ui.start_button.setText("Start")
+                    print('pause button clicked')
+                    break
+
         else:
-            ui.start_button.setText("Start")
             started = False
-            print('paused')
+            ui.start_button.setText("Start")
+            print('pause button clicked')
 
 
 if __name__ == "__main__":
