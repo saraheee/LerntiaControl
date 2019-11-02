@@ -4,6 +4,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QLabel
+from src.ProcessImage import ProcessImage
 import cv2
 
 started = False
@@ -87,9 +88,13 @@ class Ui_MainWindow(object):
                 # capture frame
                 ret, frame = cap.read()
 
-                # display frame
+                # process camera frame
+                img = ProcessImage(frame)
+                frame = img.pre_processing()
+
+                # display mirrored frame
                 img = '[LerntiaControl] Kamerabild'
-                cv2.imshow(img, frame)
+                cv2.imshow(img, cv2.flip(frame, 1))
 
                 # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
                 if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
