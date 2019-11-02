@@ -14,6 +14,45 @@ print("Welcome to LerntiaControl!")
 print("OpenCV Version: ", cv2.__version__, '\n')
 
 
+def on_click():
+    global started
+    if not started:
+        ui.start_button.setText("Pause")
+        started = True
+        print('start button clicked')
+
+        cap = cv2.VideoCapture(0)
+
+        while True:
+            # capture frame
+            ret, frame = cap.read()
+
+            # process camera frame
+            img = ProcessImage(frame)
+            frame = img.pre_processing()
+
+            # display mirrored frame
+            img = '[LerntiaControl] Kamerabild'
+            cv2.imshow(img, cv2.flip(frame, 1))
+
+            # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
+            if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
+                cap.release()
+                cv2.destroyAllWindows()
+                activate_pause_button()
+                break
+
+    else:
+        activate_pause_button()
+
+
+def activate_pause_button():
+    global started
+    started = False
+    ui.start_button.setText("Start")
+    print('pause button clicked')
+
+
 class Ui_MainWindow(object):
     def setup_ui(self, main_window):
         main_window.setObjectName("MainWindow")
@@ -72,43 +111,7 @@ class Ui_MainWindow(object):
         self.do_something.setText(_translate("MainWindow", "Klick"))
 
         # connect signals to slots
-        self.start_button.clicked.connect(self.on_click)
-
-    @staticmethod
-    def on_click():
-        global started
-        if not started:
-            ui.start_button.setText("Pause")
-            started = True
-            print('start button clicked')
-
-            cap = cv2.VideoCapture(0)
-
-            while True:
-                # capture frame
-                ret, frame = cap.read()
-
-                # process camera frame
-                img = ProcessImage(frame)
-                frame = img.pre_processing()
-
-                # display mirrored frame
-                img = '[LerntiaControl] Kamerabild'
-                cv2.imshow(img, cv2.flip(frame, 1))
-
-                # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
-                if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
-                    cap.release()
-                    cv2.destroyAllWindows()
-                    started = False
-                    ui.start_button.setText("Start")
-                    print('pause button clicked')
-                    break
-
-        else:
-            started = False
-            ui.start_button.setText("Start")
-            print('pause button clicked')
+        self.start_button.clicked.connect(on_click)
 
 
 if __name__ == "__main__":
