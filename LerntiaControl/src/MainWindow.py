@@ -2,6 +2,7 @@
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QLabel
 from src.ProcessImage import ProcessImage
@@ -31,7 +32,15 @@ def on_click():
             img = ProcessImage(frame)
             frame = img.pre_processing()
 
-            # display mirrored frame
+            # convert mirrored frame to qt format and display image
+            rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+            h, w, ch = rgb_image.shape
+            bytes_per_line = ch * w
+            convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+            p = convert_to_qt_format.scaled(w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            ui.camera_view.setPixmap(QPixmap(p))
+
+            # display mirrored frame in new window
             img = '[LerntiaControl] Kamerabild'
             cv2.imshow(img, cv2.flip(frame, 1))
 
@@ -56,7 +65,6 @@ def activate_pause_button():
 class Ui_MainWindow(object):
     def setup_ui(self, main_window):
         main_window.setObjectName("MainWindow")
-        main_window.resize(870, 596)
 
         self.central_widget = QtWidgets.QWidget(main_window)
         self.central_widget.setObjectName("central_widget")
