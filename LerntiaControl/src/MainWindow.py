@@ -19,7 +19,7 @@ def on_click():
     global started
     if not started:
         activate_start_button()
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
         while True:
             # capture frame
