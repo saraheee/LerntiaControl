@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QLabel
 from src.ProcessImage import ProcessImage
 import cv2
 
+default_image = '../icon/control-teaser'
 started = False
 ui = 0
 
@@ -45,7 +46,7 @@ def on_click():
             if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
                 cap.release()
                 cv2.destroyAllWindows()
-                activate_pause_button()
+                started = False
                 break
 
     else:
@@ -57,6 +58,7 @@ def activate_pause_button():
     started = False
     ui.start_button.setText("Start")
     print('pause button clicked')
+    set_image(default_image)
 
 
 def activate_start_button():
@@ -64,6 +66,12 @@ def activate_start_button():
     started = True
     ui.start_button.setText("Pause")
     print('start button clicked')
+
+
+def set_image(img):
+    status_img = QPixmap(img)
+    ui.camera_view.setPixmap(QPixmap(status_img))
+    ui.camera_view.setScaledContents(True)
 
 
 class Ui_MainWindow(object):
@@ -82,9 +90,7 @@ class Ui_MainWindow(object):
         self.camera_view.setObjectName("camera_view")
         self.vertical_layout.addWidget(self.camera_view)
         self.verticalLayout_2.addLayout(self.vertical_layout)
-        status_img = QPixmap('../ui/green')
-        ui.camera_view.setPixmap(QPixmap(status_img))
-        ui.camera_view.setScaledContents(True)
+        set_image(default_image)
 
         self.start_button = QtWidgets.QPushButton(self.central_widget)
         font = QtGui.QFont()
