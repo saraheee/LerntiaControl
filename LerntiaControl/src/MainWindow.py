@@ -9,6 +9,8 @@ from src.ProcessImage import ProcessImage
 import cv2
 
 default_image = '../icon/control-teaser'
+face_model = '../model/haarcascades/haarcascade_frontalface_alt.xml'
+eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
 started = False
 ui = 0
 
@@ -21,6 +23,17 @@ def on_click():
     if not started:
         activate_start_button()
         cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        if not cap.isOpened():
+            print("ERROR: Failed to connect to camera!")
+            return
+
+        if not cv2.CascadeClassifier(face_model):
+            print("ERROR: Failed to load face detector!")
+            return
+
+        if not cv2.CascadeClassifier(eye_model):
+            print("ERROR: Failed to load eye detector!")
+            return
 
         while True:
             # capture frame
@@ -28,7 +41,10 @@ def on_click():
 
             # process camera frame
             img = ProcessImage(frame)
-            frame = img.pre_processing()
+            img.pre_processing()
+
+            # detect face and eyes
+            frame = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
 
             # convert mirrored frame to qt format and display image
             rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
