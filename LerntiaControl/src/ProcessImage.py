@@ -13,5 +13,23 @@ class ProcessImage:
 
     def detect_face_and_eyes(self, face_classifier, eye_classifier):
         # todo
+        # objects = cv2.CascadeClassifier.detectMultiScale(
+        # image,
+        # scaleFactor,
+        # minNeighbors[,
+        # flags,
+        # minSize,
+        # maxSize
+        # faces = cv2.CascadeClassifier.detectMultiScale(self.frame, 1.1, 2, 0, (30, 30), (150, 150))
+        # eyes = cv2.CascadeClassifier.detectMultiScale(faces[0], 1.1, 2, 0, (30, 30), (150, 150))
+
+        faces = face_classifier.detectMultiScale(self.frame, 1.35, 5)
+        for (x, y, w, h) in faces:
+            cv2.rectangle(self.frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            roi = self.frame[y:y + h, x:x + w]
+            eyes = eye_classifier.detectMultiScale(roi)
+            for (ex, ey, ew, eh) in eyes:
+                cv2.rectangle(roi, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+
         return self.frame
 
