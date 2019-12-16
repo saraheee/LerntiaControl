@@ -12,6 +12,8 @@ default_image = '../icon/control-teaser'
 face_model = '../model/haarcascades/haarcascade_frontalface_alt.xml'
 eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
 started = False
+x_max_res = 1920
+y_max_res = 1080
 ui = 0
 
 print("Welcome to LerntiaControl!")
@@ -35,6 +37,10 @@ def on_click():
             print("ERROR: Failed to load eye detector!")
             return
 
+        cap.set(3, x_max_res)
+        cap.set(4, y_max_res)
+        print("resolution: ", cap.get(3), cap.get(4), "\n")
+
         while True:
             # capture frame
             ret, frame = cap.read()
@@ -51,7 +57,7 @@ def on_click():
             h, w, ch = rgb_image.shape
             bytes_per_line = ch * w
             convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-            p = convert_to_qt_format.scaled(w/3, h/3, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            p = convert_to_qt_format.scaled(w/6, h/6, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             ui.camera_view.setPixmap(QPixmap(p))
 
             # display mirrored frame in new window
@@ -62,7 +68,7 @@ def on_click():
             if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
                 cap.release()
                 cv2.destroyAllWindows()
-                started = False
+                activate_pause_button()
                 break
 
     else:

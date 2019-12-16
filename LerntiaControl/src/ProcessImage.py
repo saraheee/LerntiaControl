@@ -8,20 +8,19 @@ class ProcessImage:
 
     def pre_processing(self):
         self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
-        cv2.equalizeHist(self.frame, self.frame)
+        # cv2.equalizeHist(self.frame, self.frame)
         return self.frame
 
     def detect_face_and_eyes(self, face_classifier, eye_classifier):
-        # todo
+
         # objects = cv2.CascadeClassifier.detectMultiScale(
         # image,
         # scaleFactor,
-        # minNeighbors[,
+        # minNeighbors,
         # flags,
         # minSize,
         # maxSize
-        # faces = cv2.CascadeClassifier.detectMultiScale(self.frame, 1.1, 2, 0, (30, 30), (150, 150))
-        # eyes = cv2.CascadeClassifier.detectMultiScale(faces[0], 1.1, 2, 0, (30, 30), (150, 150))
+        # )
 
         faces = face_classifier.detectMultiScale(self.frame, 1.35, 5)
         for (x, y, w, h) in faces:
