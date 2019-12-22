@@ -24,10 +24,14 @@ def on_click():
     global started
     if not started:
         activate_start_button()
-        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+        cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # connect to usb camera
         if not cap.isOpened():
-            print("ERROR: Failed to connect to camera!")
-            return
+            print("ERROR: Failed to connect to usb camera!")
+            cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to internal camera
+            if not cap.isOpened():
+                print("ERROR: Failed to connect to usb or internal camera!")
+                return
 
         if not cv2.CascadeClassifier(face_model):
             print("ERROR: Failed to load face detector!")
