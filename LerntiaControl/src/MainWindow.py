@@ -1,25 +1,28 @@
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
+
+import sys
+
+import cv2
 import imutils
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QLabel
-from src.ProcessImage import ProcessImage
 from imutils.video import FPS
-import cv2
+
+from src.ProcessImage import ProcessImage
 
 default_image = '../icon/control-teaser'
 face_model = '../model/haarcascades/haarcascade_frontalface_alt.xml'
 eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
 started = False
-x_max_res = 1920
-y_max_res = 1080
 ui = 0
 
 print("Welcome to LerntiaControl!")
-print("OpenCV Version: ", cv2.__version__, '\n')
+print("OpenCV Version: ", cv2.__version__)
+print("Python Version: ", sys.version, '\n')
 
 
 def on_click():
@@ -29,10 +32,10 @@ def on_click():
 
         cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # connect to usb camera
         if not cap.isOpened():
-            print("ERROR: Failed to connect to usb camera!")
+            print("WARNING: Failed to connect to usb camera! Connecting to internal camera instead.")
             cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to internal camera
             if not cap.isOpened():
-                print("ERROR: Failed to connect to usb or internal camera!")
+                print("ERROR: Failed to connect to internal camera!")
                 return
 
         fps = FPS().start()
@@ -45,10 +48,6 @@ def on_click():
             print("ERROR: Failed to load eye detector!")
             return
 
-        cap.set(3, x_max_res)
-        cap.set(4, y_max_res)
-        print("resolution: ", cap.get(3), cap.get(4), "\n")
-
         while True:
             # capture frame
             ret, frame = cap.read()
@@ -57,7 +56,7 @@ def on_click():
             if not ret:
                 break
 
-            frame = imutils.resize(frame, width=450)
+            # frame = imutils.resize(frame, width=450)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             frame = np.dstack([frame, frame, frame])
 
@@ -68,14 +67,14 @@ def on_click():
             # detect face and eyes
             frame = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
 
-            # convert mirrored frame to qt format and display image
-            rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
-            cv2.putText(rgb_image, "BILD", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-            h, w, ch = rgb_image.shape
-            bytes_per_line = ch * w
-            convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-            p = convert_to_qt_format.scaled(w/2, h/2, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-            ui.camera_view.setPixmap(QPixmap(p))
+            # convert mirrored frame to qt format and display image in main window
+            # rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+            # cv2.putText(rgb_image, "CAMERA", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+            # h, w, ch = rgb_image.shape
+            # bytes_per_line = ch * w
+            # convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+            # p = convert_to_qt_format.scaled(w/2, h/2, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            # ui.camera_view.setPixmap(QPixmap(p))
 
             # display mirrored frame in new window
             img = '[LerntiaControl] Kamerabild'
@@ -86,7 +85,7 @@ def on_click():
             fps.stop()
 
             # show FPS information
-            print("INFO: elapsed time: {:.2f}".format(fps.elapsed()))
+            # print("INFO: elapsed time: {:.2f}".format(fps.elapsed()))
             print("INFO: approx. FPS: {:.2f}".format(fps.fps()))
 
             # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
