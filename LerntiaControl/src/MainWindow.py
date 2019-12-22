@@ -4,8 +4,6 @@
 import sys
 
 import cv2
-import imutils
-import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
@@ -18,6 +16,7 @@ default_image = '../icon/control-teaser'
 face_model = '../model/haarcascades/haarcascade_frontalface_alt.xml'
 eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
 started = False
+show_fps = False
 ui = 0
 
 print("Welcome to LerntiaControl!")
@@ -30,10 +29,10 @@ def on_click():
     if not started:
         activate_start_button()
 
-        cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # connect to usb camera
+        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to usb camera
         if not cap.isOpened():
             print("WARNING: Failed to connect to usb camera! Connecting to internal camera instead.")
-            cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to internal camera
+            cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # connect to internal camera
             if not cap.isOpened():
                 print("ERROR: Failed to connect to internal camera!")
                 return
@@ -50,31 +49,31 @@ def on_click():
 
         while True:
             # capture frame
-            ret, frame = cap.read()
+            ret, rgb_frame = cap.read()
 
             # end of the stream reached
             if not ret:
                 break
 
             # frame = imutils.resize(frame, width=450)
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            frame = np.dstack([frame, frame, frame])
+            # frame = cv2.cvtColor(rgb_frame, cv2.COLOR_BGR2GRAY)
+            # frame = np.dstack([frame, frame, frame])
 
             # process camera frame
-            img = ProcessImage(frame)
-            img.pre_processing()
+            img = ProcessImage(rgb_frame)
+            # img.pre_processing()
 
             # detect face and eyes
             frame = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
 
             # convert mirrored frame to qt format and display image in main window
-            # rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
-            # cv2.putText(rgb_image, "CAMERA", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-            # h, w, ch = rgb_image.shape
-            # bytes_per_line = ch * w
-            # convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-            # p = convert_to_qt_format.scaled(w/2, h/2, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-            # ui.camera_view.setPixmap(QPixmap(p))
+            rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+            cv2.putText(rgb_image, "CAMERA ", (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (150, 255, 0), 6)
+            h, w, ch = rgb_image.shape
+            bytes_per_line = ch * w
+            convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+            p = convert_to_qt_format.scaled(w/3, h/3, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            ui.camera_view.setPixmap(QPixmap(p))
 
             # display mirrored frame in new window
             img = '[LerntiaControl] Kamerabild'
@@ -84,9 +83,13 @@ def on_click():
             # stop fps timer
             fps.stop()
 
-            # show FPS information
-            # print("INFO: elapsed time: {:.2f}".format(fps.elapsed()))
-            print("INFO: approx. FPS: {:.2f}".format(fps.fps()))
+            # show/hide FPS information in console if F key is pressed
+            global show_fps
+            if cv2.waitKey(1) == ord('f'):
+                show_fps = not show_fps
+            if show_fps:
+                # print("INFO: Elapsed time: {:.2f}".format(fps.elapsed()))
+                print("INFO: ~FPS: {:.2f}".format(fps.fps()))
 
             # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
             if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
@@ -124,6 +127,7 @@ class Ui_MainWindow(object):
     def setup_ui(self, main_window):
         main_window.setObjectName("MainWindow")
         main_window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        main_window.setWindowIcon(QtGui.QIcon('../icon/control.ico'))
 
         self.central_widget = QtWidgets.QWidget(main_window)
         self.central_widget.setObjectName("central_widget")
@@ -170,7 +174,7 @@ class Ui_MainWindow(object):
         global ui
         ui = self
         _translate = QtCore.QCoreApplication.translate
-        main_window.setWindowTitle(_translate("MainWindow", "[LerntiaControl] Hauptfenster"))
+        main_window.setWindowTitle(_translate("MainWindow", "Status"))
         self.start_button.setText(_translate("MainWindow", "Start"))
         self.menu.setTitle(_translate("MainWindow", "Menü"))
         self.do_something.setText(_translate("MainWindow", "Klick"))
