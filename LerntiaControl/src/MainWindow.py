@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
-
+import imutils
+import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QLabel
 from src.ProcessImage import ProcessImage
+from imutils.video import FPS
 import cv2
 
 default_image = '../icon/control-teaser'
@@ -33,6 +35,8 @@ def on_click():
                 print("ERROR: Failed to connect to usb or internal camera!")
                 return
 
+        fps = FPS().start()
+
         if not cv2.CascadeClassifier(face_model):
             print("ERROR: Failed to load face detector!")
             return
@@ -49,6 +53,14 @@ def on_click():
             # capture frame
             ret, frame = cap.read()
 
+            # end of the stream reached
+            if not ret:
+                break
+
+            frame = imutils.resize(frame, width=450)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            frame = np.dstack([frame, frame, frame])
+
             # process camera frame
             img = ProcessImage(frame)
             img.pre_processing()
@@ -58,15 +70,24 @@ def on_click():
 
             # convert mirrored frame to qt format and display image
             rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+            cv2.putText(rgb_image, "BILD", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
             h, w, ch = rgb_image.shape
             bytes_per_line = ch * w
             convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-            p = convert_to_qt_format.scaled(w/6, h/6, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            p = convert_to_qt_format.scaled(w/2, h/2, Qt.KeepAspectRatio, Qt.SmoothTransformation)
             ui.camera_view.setPixmap(QPixmap(p))
 
             # display mirrored frame in new window
             img = '[LerntiaControl] Kamerabild'
             cv2.imshow(img, cv2.flip(frame, 1))
+            fps.update()
+
+            # stop fps timer
+            fps.stop()
+
+            # show FPS information
+            print("INFO: elapsed time: {:.2f}".format(fps.elapsed()))
+            print("INFO: approx. FPS: {:.2f}".format(fps.fps()))
 
             # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
             if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
