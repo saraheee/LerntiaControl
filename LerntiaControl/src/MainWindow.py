@@ -47,7 +47,7 @@ def on_click():
             print("ERROR: Failed to load eye detector!")
             return
 
-        while True:
+        while cap.isOpened():
             # capture frame
             ret, rgb_frame = cap.read()
 
@@ -67,13 +67,7 @@ def on_click():
             frame = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
 
             # convert mirrored frame to qt format and display image in main window
-            rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
-            cv2.putText(rgb_image, "CAMERA ", (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (150, 255, 0), 6)
-            h, w, ch = rgb_image.shape
-            bytes_per_line = ch * w
-            convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
-            p = convert_to_qt_format.scaled(w/3, h/3, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-            ui.camera_view.setPixmap(QPixmap(p))
+            set_image_in_main_window(frame)
 
             # display mirrored frame in new window
             img = '[LerntiaControl] Kamerabild'
@@ -100,6 +94,16 @@ def on_click():
 
     else:
         activate_pause_button()
+
+
+def set_image_in_main_window(frame):
+    rgb_image = cv2.cvtColor(cv2.flip(frame, 1), cv2.COLOR_BGR2RGB)
+    cv2.putText(rgb_image, "CAMERA ", (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (150, 255, 0), 6)
+    h, w, ch = rgb_image.shape
+    bytes_per_line = ch * w
+    convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
+    p = convert_to_qt_format.scaled(w / 3, h / 3, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+    ui.camera_view.setPixmap(QPixmap(p))
 
 
 def activate_pause_button():
