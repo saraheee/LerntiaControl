@@ -72,7 +72,7 @@ def on_click():
             # move mouse
             m = MoveMouse(prev_data, data)
             m.move_mouse()
-            prev_data = data
+            prev_data.append(data)
 
             # perform mouse clicks
             # todo
