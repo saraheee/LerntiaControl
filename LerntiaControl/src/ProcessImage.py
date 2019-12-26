@@ -1,7 +1,8 @@
 import sys
 
 import cv2
-import numpy as np
+
+left_ex_prev = 0
 
 
 class ProcessImage:
@@ -19,6 +20,9 @@ class ProcessImage:
         left_ey = 0
         left_ew = 0
         left_eh = 0
+
+        cut_face = self.frame
+        cut_eye = self.frame
 
         # objects = cv2.CascadeClassifier.detectMultiScale(image, scaleFactor, minNeighbors, flags, minSize, maxSize)
         faces = face_classifier.detectMultiScale(self.frame, 1.35, 5)
@@ -49,5 +53,12 @@ class ProcessImage:
             if cut_eye.size:
                 cv2.imshow("cut_eye", cut_eye)
 
-        print("left eye, x-coordinate: ", left_ex)
-        return self.frame
+        return ProcessedImage(self.frame, cut_face, cut_eye, left_ex)
+
+
+class ProcessedImage:
+    def __init__(self, frame, face, eye, gaze):
+        self.frame = frame
+        self.face = face
+        self.eye = eye
+        self.gaze = gaze

@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QLabel
 from imutils.video import FPS
 
 from src.ProcessImage import ProcessImage
+from src.MoveMouse import MoveMouse
 
 default_image = '../icon/control-teaser'
 face_model = '../model/haarcascades/haarcascade_frontalface_alt.xml'
@@ -47,6 +48,8 @@ def on_click():
             print("ERROR: Failed to load eye detector!")
             return
 
+        prev_data = []
+
         while cap.isOpened():
             # capture frame
             ret, rgb_frame = cap.read()
@@ -64,14 +67,22 @@ def on_click():
             # img.pre_processing()
 
             # detect face and eyes
-            frame = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
+            data = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
+
+            # move mouse
+            m = MoveMouse(prev_data, data)
+            m.move_mouse()
+            prev_data = data
+
+            # perform mouse clicks
+            # todo
 
             # convert mirrored frame to qt format and display image in main window
-            set_image_in_main_window(frame)
+            set_image_in_main_window(data.frame)
 
             # display mirrored frame in new window
             img = '[LerntiaControl] Kamerabild'
-            cv2.imshow(img, cv2.flip(frame, 1))
+            cv2.imshow(img, cv2.flip(data.frame, 1))
             fps.update()
 
             # stop fps timer
