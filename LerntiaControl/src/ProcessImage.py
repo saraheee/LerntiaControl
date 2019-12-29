@@ -53,12 +53,13 @@ class ProcessImage:
             if cut_eye.size:
                 cv2.imshow("cut_eye", cut_eye)
 
-        return ProcessedImage(self.frame, cut_face, cut_eye, left_ex)
+        return ProcessedImage(self.frame, cut_face, cut_eye, left_ex, left_ey)
 
 
 class ProcessedImage:
-    def __init__(self, frame, face, eye, gaze):
+    def __init__(self, frame, face, eye, xgaze, ygaze):
         self.frame = frame
         self.face = face
         self.eye = eye
-        self.gaze = gaze
+        self.xgaze = xgaze
+        self.ygaze = ygaze
