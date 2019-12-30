@@ -3,7 +3,7 @@ import sys
 import cv2
 import numpy as np
 
-conf_value = 0.85
+conf_value = 0.10
 face_color = (138, 0, 138)
 
 
@@ -74,16 +74,18 @@ class ProcessImage:
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
             if confidence < conf_value:
-                continue
+                print("INFO: Face found with confidence below threshold. Confidence value: ", confidence)
 
-            box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-            (startX, startY, endX, endY) = box.astype("int")
-            text = "Face: {:.2f}%".format(confidence * 100)
-            y = startY - 10 if startY - 10 > 10 else startY + 10
-            cv2.rectangle(self.frame, (startX, startY), (endX, endY), face_color, 4)
-            # cv2.rectangle(self.frame, (x, y), (x + w, y + h), face_color, 4)
-            faces.append([startX, startY, endX-startX, endY-startY])
-            cv2.putText(self.frame, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 1, face_color, 2)
+            if confidence >= conf_value:
+                box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+                (startX, startY, endX, endY) = box.astype("int")
+                text = "Face: {:.2f}%".format(confidence * 100)
+                y = startY - 10 if startY - 10 > 10 else startY + 10
+                cv2.rectangle(self.frame, (startX, startY), (endX, endY), face_color, 4)
+                # cv2.rectangle(self.frame, (x, y), (x + w, y + h), face_color, 4)
+                faces.append([startX, startY, endX-startX, endY-startY])
+                cv2.putText(self.frame, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 1, face_color, 2)
+                break
 
         for (x, y, w, h) in faces:
             # detect eyes

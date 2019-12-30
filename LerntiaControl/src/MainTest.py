@@ -23,7 +23,9 @@ print("Welcome to LerntiaControl!")
 print("OpenCV Version: ", cv2.__version__)
 print("Python Version: ", sys.version, '\n')
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to usb camera
+cap = cv2.VideoCapture('../model/test.mp4')
+
+# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to usb camera
 if not cap.isOpened():
     print("WARNING: Failed to connect to usb camera! Connecting to internal camera instead.")
 
@@ -60,7 +62,7 @@ while cap.isOpened():
 
     # move mouse
     m = MoveMouse(prev_data, data)
-    m.move_mouse()
+    # m.move_mouse()
     prev_data.append(data)
 
     # perform mouse clicks
