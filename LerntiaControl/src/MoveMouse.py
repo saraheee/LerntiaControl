@@ -31,7 +31,6 @@ class MoveMouse:
                 if f.xgaze < smallest_value:
                     smallest_value = f.xgaze
             if smallest_value < self.data.xgaze - x_sens:
-
                 print("move right")
                 self.mouse.move(x_step, 0)
 
@@ -41,7 +40,6 @@ class MoveMouse:
                 if f.xgaze > largest_value:
                     largest_value = f.xgaze
             if largest_value > self.data.xgaze + x_sens:
-
                 print("move left")
                 self.mouse.move(-x_step, 0)
 
@@ -51,7 +49,6 @@ class MoveMouse:
                 if f.ygaze < smallest_value:
                     smallest_value = f.ygaze
             if smallest_value < self.data.ygaze - y_sens:
-
                 print("move up")
                 self.mouse.move(0, y_step)
 
@@ -61,11 +58,11 @@ class MoveMouse:
                 if f.ygaze > largest_value:
                     largest_value = f.ygaze
             if largest_value > self.data.ygaze + y_sens:
-
                 print("move down")
                 self.mouse.move(0, -y_step)
 
-        #todo: condiser head position before applying movement
+    def detect_head_nod(self):
+        pass  # todo
 
         # print("xgaze point: ", self.data.xgaze)
         # if self.prev_data:

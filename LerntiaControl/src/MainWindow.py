@@ -64,21 +64,17 @@ def on_click():
             if not ret:
                 break
 
-            # frame = imutils.resize(frame, width=450)
-            # frame = cv2.cvtColor(rgb_frame, cv2.COLOR_BGR2GRAY)
-            # frame = np.dstack([frame, frame, frame])
-
             # process camera frame
             img = ProcessImage(rgb_frame)
             img.pre_processing()
 
             # detect face and eyes
             # data = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
-            data = img.detect_face_and_eyes_enhanced(net)
+            data = img.detect_face_and_eyes_enhanced(net, cv2.CascadeClassifier(eye_model))
 
             # move mouse
             m = MoveMouse(prev_data, data)
-            # m.move_mouse() # todo
+            m.move_mouse()
             prev_data.append(data)
 
             # perform mouse clicks

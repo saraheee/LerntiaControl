@@ -29,19 +29,47 @@ class ProcessImage:
         # objects = cv2.CascadeClassifier.detectMultiScale(image, scaleFactor, minNeighbors, flags, minSize, maxSize)
         faces = face_classifier.detectMultiScale(self.frame, 1.35, 5)
         for (x, y, w, h) in faces:
-            cv2.rectangle(self.frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            cv2.rectangle(self.frame, (x, y), (x + w, y + h), face_color, 4)
 
             # detect eyes
-            cut_eye = detect_eyes(x, y, w, h)
+            roi = self.frame[y:y + h, x:x + w]
+            eyes = eye_classifier.detectMultiScale(roi)
+            i = 0
+            for (ex, ey, ew, eh) in eyes:
+                cv2.rectangle(roi, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+
+                # get left eye by x-coordinate
+                if ex < left_ex:
+                    left_ex = ex
+                    left_ey = ey
+                    left_ew = ew
+                    left_eh = eh
+                i = i + 1
+            if left_ex < sys.maxsize:
+                cv2.rectangle(roi, (left_ex, left_ey), (left_ex + left_ew, left_ey + left_eh), (0, 0, 255), 4)
+
+            # cut face and eye out of the image
+            cut_face = self.frame[y:y + h, x:x + w]
+            cut_eye = cut_face[left_ey:left_ey + left_eh, left_ex:left_ex + left_ew]
+            if cut_eye.size:
+                cv2.imshow("cut_eye", cut_eye)
 
         return ProcessedImage(self.frame, cut_face, cut_eye, left_ex, left_ey)
 
-    def detect_face_and_eyes_enhanced(self, net):
+    def detect_face_and_eyes_enhanced(self, net, eye_classifier):
+        left_ex = sys.maxsize
+        left_ey = 0
+        left_ew = 0
+        left_eh = 0
+
+        cut_face = self.frame
+        cut_eye = self.frame
 
         (h, w) = self.frame.shape[:2]
         blob = cv2.dnn.blobFromImage(cv2.resize(self.frame, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
         net.setInput(blob)
         detections = net.forward()
+        faces = []
 
         for i in range(0, detections.shape[2]):
             confidence = detections[0, 0, i, 2]
@@ -53,33 +81,36 @@ class ProcessImage:
             text = "Face: {:.2f}%".format(confidence * 100)
             y = startY - 10 if startY - 10 > 10 else startY + 10
             cv2.rectangle(self.frame, (startX, startY), (endX, endY), face_color, 4)
+            # cv2.rectangle(self.frame, (x, y), (x + w, y + h), face_color, 4)
+            faces.append([startX, startY, endX-startX, endY-startY])
             cv2.putText(self.frame, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 1, face_color, 2)
 
-        return EnhancedProcessing(self.frame)
+        for (x, y, w, h) in faces:
+            # detect eyes
+            roi = self.frame[y:y + h, x:x + w]
+            eyes = eye_classifier.detectMultiScale(roi)
+            i = 0
+            for (ex, ey, ew, eh) in eyes:
+                cv2.rectangle(roi, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
 
-    def detect_eyes(self, x, y, w, h):
-        roi = self.frame[y:y + h, x:x + w]
-        eyes = eye_classifier.detectMultiScale(roi)
-        i = 0
-        for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+                # get left eye by x-coordinate
+                if ex < left_ex:
+                    left_ex = ex
+                    left_ey = ey
+                    left_ew = ew
+                    left_eh = eh
+                i = i + 1
+            if left_ex < sys.maxsize:
+                cv2.rectangle(roi, (left_ex, left_ey), (left_ex + left_ew, left_ey + left_eh), (0, 0, 255), 4)
 
-            # get left eye by x-coordinate
-            if ex < left_ex:
-                left_ex = ex
-                left_ey = ey
-                left_ew = ew
-                left_eh = eh
-            i = i + 1
-        if left_ex < sys.maxsize:
-            cv2.rectangle(roi, (left_ex, left_ey), (left_ex + left_ew, left_ey + left_eh),
-                          (0, 0, 255), 4)
+            # cut face and eye out of the image
+            cut_face = self.frame[y:y + h, x:x + w]
+            cut_eye = cut_face[left_ey:left_ey + left_eh, left_ex:left_ex + left_ew]
+            if cut_eye.size:
+                cv2.imshow("cut_eye", cut_eye)
 
-        # cut face and eye out of the image
-        cut_face = self.frame[y:y + h, x:x + w]
-        cut_eye = cut_face[left_ey:left_ey + left_eh, left_ex:left_ex + left_ew]
-        if cut_eye.size:
-            cv2.imshow("cut_eye", cut_eye)
+        return ProcessedImage(self.frame, cut_face, cut_eye, left_ex, left_ey)
+
 
 class ProcessedImage:
     def __init__(self, frame, face, eye, xgaze, ygaze):

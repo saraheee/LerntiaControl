@@ -56,11 +56,11 @@ while cap.isOpened():
 
     # detect face and eyes
     # data = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
-    data = img.detect_face_and_eyes_enhanced(net)
+    data = img.detect_face_and_eyes_enhanced(net, cv2.CascadeClassifier(eye_model))
 
     # move mouse
     m = MoveMouse(prev_data, data)
-    # m.move_mouse()
+    m.move_mouse()
     prev_data.append(data)
 
     # perform mouse clicks
