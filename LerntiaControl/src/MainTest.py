@@ -7,8 +7,14 @@ from src.MoveMouse import MoveMouse
 from src.ProcessImage import ProcessImage
 
 default_image = '../icon/control-teaser'
+
+# models applied for basic face/eye detection
 face_model = '../model/haarcascades/haarcascade_frontalface_alt.xml'
 eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
+
+# models used for enhanced face detection
+net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_300x300_ssd_iter_140000.caffemodel')
+
 started = False
 show_fps = False
 ui = 0
@@ -46,14 +52,15 @@ while cap.isOpened():
 
     # process camera frame
     img = ProcessImage(rgb_frame)
-    # img.pre_processing()
+    img.pre_processing()
 
     # detect face and eyes
-    data = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
+    # data = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
+    data = img.detect_face_and_eyes_enhanced(net)
 
     # move mouse
     m = MoveMouse(prev_data, data)
-    m.move_mouse()
+    # m.move_mouse()
     prev_data.append(data)
 
     # perform mouse clicks
@@ -61,7 +68,7 @@ while cap.isOpened():
 
     # display mirrored frame in new window
     img = '[LerntiaControl] Kamerabild'
-    cv2.imshow(img, cv2.flip(data.frame, 1))
+    cv2.imshow(img, data.frame)
     fps.update()
 
     # stop fps timer
