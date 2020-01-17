@@ -5,6 +5,7 @@ import numpy as np
 
 conf_value = 0.10
 face_color = (138, 0, 138)
+face_color2 = (138, 138, 138)
 
 
 class ProcessImage:
@@ -81,7 +82,11 @@ class ProcessImage:
                 (startX, startY, endX, endY) = box.astype("int")
                 text = "Face: {:.2f}%".format(confidence * 100)
                 y = startY - 10 if startY - 10 > 10 else startY + 10
-                cv2.rectangle(self.frame, (startX, startY), (endX, endY), face_color, 4)
+
+                print("END X: ", endX)
+
+                cv2.rectangle(self.frame, (startX, startY), (endX-int((endX-startX)/2)+10, endY), face_color, 4)
+                cv2.rectangle(self.frame, (startX+int((endX-startX)/2)-10, startY), (endX, endY), face_color2, 4)
                 # cv2.rectangle(self.frame, (x, y), (x + w, y + h), face_color, 4)
                 faces.append([startX, startY, endX-startX, endY-startY])
                 cv2.putText(self.frame, text, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 1, face_color, 2)

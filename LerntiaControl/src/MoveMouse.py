@@ -39,15 +39,27 @@ class MoveMouse:
             ydifferences = []  # y - self.data.ygaze for y in last_frames]
 
             for d in last_frames:
+                # print("xgaze:", d.xgaze)
+                # print("ygaze:", d.ygaze)
                 xdifferences.append(self.data.xgaze - d.xgaze)
                 ydifferences.append(self.data.ygaze - d.ygaze)
 
             # todo: consider x_sens and y_sens in difference
-            for f in xdifferences:
-                print("xdiff: ", f)
+            # print("xlen: ", len(xdifferences))
+            # print("ylen: ", len(ydifferences))
 
-            for f in ydifferences:
-                print("Y DIFF: ", f)
+            # for f in xdifferences:
+            #     print("xdiff: ", f)
+
+            # for f in ydifferences:
+            #     print("Y DIFF: ", f)
+
+        # CRASH START
+        #    if len(xdifferences):
+        #        self.mouse.move(sum(xdifferences) / len(xdifferences), 0)
+        #    if len(ydifferences):
+        #        self.mouse.move(0, sum(ydifferences) / len(ydifferences))
+        # CRASH END
 
         # if self.prev_data:  # and self.prev_data.xgaze > self.data.xgaze + x_sens:
         #    largest_value = -1
