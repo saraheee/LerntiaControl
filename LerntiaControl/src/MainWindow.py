@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
-
+import subprocess
 import sys
+import time
 
 import cv2
+import win32gui
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtCore import Qt, QProcess
+from PyQt5.QtGui import QPixmap, QWindow
+from PyQt5.QtWidgets import QLabel, QApplication
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QPoint, Qt, QTimer
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QPalette, QBrush, QPen
 from imutils.video import FPS
 
 from src.ProcessImage import ProcessImage
@@ -55,6 +60,9 @@ def on_click():
             return
 
         prev_data = []
+        data = []
+        m = MoveMouse(prev_data, data)
+        m.center_mouse()
 
         while cap.isOpened():
             # capture frame
@@ -99,8 +107,11 @@ def on_click():
                 # print("INFO: Elapsed time: {:.2f}".format(fps.elapsed()))
                 print("INFO: ~FPS: {:.2f}".format(fps.fps()))
 
+            # QApplication.setOverrideCursor(Qt.WaitCursor)
+
             # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
             if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
+                # QApplication.restoreOverrideCursor()
                 cap.release()
                 cv2.destroyAllWindows()
                 activate_pause_button()
@@ -187,6 +198,15 @@ class Ui_MainWindow(object):
 
         self.retranslate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
+
+        # subprocess.call(['java', '-jar', 'lerntia.jar'])
+        # hwnd = win32gui.FindWindowEx(0, 0, "Lerntia", "Lerntia")
+        # time.sleep(0.05)
+        # window = QWindow.fromWinId(hwnd)
+        # window.createWindowContainer(window, self)
+        # window.setGeometry(500, 500, 450, 400)
+        # window.setWindowTitle('File dialog')
+        # window.show()
 
     def retranslate_ui(self, main_window):
         global ui
