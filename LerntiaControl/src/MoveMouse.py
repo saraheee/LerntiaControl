@@ -11,11 +11,12 @@ import turtle
 from win32api import GetSystemMetrics
 
 x_sens = 0.5
-y_sens = 0.5
+y_sens = 0.7
 x_step = 1.1
 y_step = 0.8
-numf = 20  # frame number
-
+numf = 10  # frame number
+pop_eps = 5
+mouse_position = (0, 0)
 
 def change_mouse_cursor():
     pass
@@ -52,6 +53,14 @@ class MoveMouse:
         self.mouse = Controller()
         self.width = GetSystemMetrics(0)
         self.height = GetSystemMetrics(1)
+        self.wait_for_click = False
+
+    def set_data(self, prev_data, data):
+        self.prev_data = prev_data
+        self.data = data
+
+    def get_wait(self):
+        return self.wait
 
     def move_mouse(self):
         print("data: ", self.data.x_middle)
@@ -93,18 +102,31 @@ class MoveMouse:
                 if not x_cond and not y_cond:
                     # change_mouse_cursor()
                     self.open_popup()
-                    self.mouse.click(Button.left, 1)  # todo: change mouse and detect click gesture
+                    # self.mouse.click(Button.left, 1)  # todo: change mouse and detect click gesture
+                    self.save_mouse_position()
 
     def center_mouse(self):
         self.mouse.position = (self.width / 2, self.height / 2)
 
     def open_popup(self):  # popup window as a click indicator
         self.w = MyPopup()
-        self.w.setGeometry(QRect(self.mouse.position[0], self.mouse.position[1], 100, 100))
-        self.w.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-        self.w.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-
+        self.w.setGeometry(QRect(self.mouse.position[0] + pop_eps, self.mouse.position[1] + pop_eps, 50, 50))
+        self.w.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.FramelessWindowHint)
+        self.wait_for_click = True
         self.w.show()
 
+    def save_mouse_position(self):
+        global mouse_position
+        mouse_position = self.mouse.position
+
+    def lock_mouse_position(self):
+        global mouse_position
+        self.mouse.position = mouse_position
+
     def detect_head_nod(self):
-        pass  # todo
+        self.lock_mouse_position()
+        nod_detected = True  # todo: detect: nod
+        if nod_detected:
+            self.mouse.click(Button.left, 1)
+        self.wait_for_click = False
+        self.w.close()

@@ -81,8 +81,11 @@ def on_click():
             data = img.detect_face_and_eyes_enhanced(net, cv2.CascadeClassifier(eye_model))
 
             # move mouse
-            m = MoveMouse(prev_data, data)
-            m.move_mouse()
+            m.set_data(prev_data, data)
+            if m.wait_for_click:
+                m.detect_head_nod()
+            else:
+                m.move_mouse()
             prev_data.append(data)
 
             # perform mouse clicks
