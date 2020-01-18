@@ -17,7 +17,7 @@ class MoveMouse:
         self.mouse = Controller()
 
     def move_mouse(self):
-        print("data: ", self.data.xgaze)
+        print("data: ", self.data.x_middle)
 
         print("Current mouse position: " + str(self.mouse.position))
 
@@ -28,21 +28,21 @@ class MoveMouse:
         # move mouse based on difference to gaze point
             # smallest_value = sys.maxsize
             # for f in last_frames:
-            #    if f.xgaze < smallest_value:
-            #        smallest_value = f.xgaze
-            # if smallest_value < self.data.xgaze - x_sens:
+            #    if f.x_middle < smallest_value:
+            #        smallest_value = f.x_middle
+            # if smallest_value < self.data.x_middle - x_sens:
             #    print("move right")
             #    self.mouse.move(x_step, 0)
 
             # weighted difference values
-            xdifferences = []  # x - self.data.xgaze for x in last_frames]
-            ydifferences = []  # y - self.data.ygaze for y in last_frames]
+            xdifferences = []  # x - self.data.x_middle for x in last_frames]
+            ydifferences = []  # y - self.data.y_middle for y in last_frames]
 
             for d in last_frames:
-                # print("xgaze:", d.xgaze)
-                # print("ygaze:", d.ygaze)
-                xdifferences.append(self.data.xgaze - d.xgaze)
-                ydifferences.append(self.data.ygaze - d.ygaze)
+                # print("x_middle:", d.x_middle)
+                # print("y_middle:", d.y_middle)
+                xdifferences.append(self.data.x_middle - d.x_middle)
+                ydifferences.append(self.data.y_middle - d.y_middle)
 
             # todo: consider x_sens and y_sens in difference
             # print("xlen: ", len(xdifferences))
@@ -61,39 +61,39 @@ class MoveMouse:
         #        self.mouse.move(0, sum(ydifferences) / len(ydifferences))
         # CRASH END
 
-        # if self.prev_data:  # and self.prev_data.xgaze > self.data.xgaze + x_sens:
+        # if self.prev_data:  # and self.prev_data.x_middle > self.data.x_middle + x_sens:
         #    largest_value = -1
         #    for f in last_frames:
-        #        if f.xgaze > largest_value:
-        #            largest_value = f.xgaze
-            # if largest_value > self.data.xgaze + x_sens:
+        #        if f.x_middle > largest_value:
+        #            largest_value = f.x_middle
+            # if largest_value > self.data.x_middle + x_sens:
             #    print("move left")
             #    self.mouse.move(-x_step, 0)
 
         # if self.prev_data:
         #    smallest_value = sys.maxsize
         #    for f in last_frames:
-        #        if f.ygaze < smallest_value:
-        #            smallest_value = f.ygaze
-            # if smallest_value < self.data.ygaze - y_sens:
+        #        if f.y_middle < smallest_value:
+        #            smallest_value = f.y_middle
+            # if smallest_value < self.data.y_middle - y_sens:
             #    print("move up")
             #    self.mouse.move(0, y_step)
 
         # if self.prev_data:
         #    largest_value = -1
         #    for f in last_frames:
-        #        if f.ygaze > largest_value:
-        #            largest_value = f.ygaze
-            # if largest_value > self.data.ygaze + y_sens:
+        #        if f.y_middle > largest_value:
+        #            largest_value = f.y_middle
+            # if largest_value > self.data.y_middle + y_sens:
             #    print("move down")
             #    self.mouse.move(0, -y_step)
 
     def detect_head_nod(self):
         pass  # todo
 
-        # print("xgaze point: ", self.data.xgaze)
+        # print("x_middle point: ", self.data.x_middle)
         # if self.prev_data:
-        #    print("xgaze point, previous: ", self.prev_data.xgaze)
+        #    print("x_middle point, previous: ", self.prev_data.x_middle)
 
         # set mouse position
         # self.mouse.position = (0, 0)
