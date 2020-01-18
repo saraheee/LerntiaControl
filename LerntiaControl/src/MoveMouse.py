@@ -1,4 +1,7 @@
 import pyglet as pyglet
+from PyQt5 import QtCore
+from PyQt5.QtCore import QRect
+from PyQt5.QtWidgets import QWidget
 from pyglet import canvas
 from pynput.mouse import Button, Controller
 import tkinter as tk
@@ -16,14 +19,14 @@ numf = 20  # frame number
 
 def change_mouse_cursor():
     pass
-    #image = pyglet.image.load('../icon/control.png')
-    #cursor = pyglet.window.ImageMouseCursor(image, 16, 8)
-    #window.set_mouse_cursor(cursor)
+    # image = pyglet.image.load('../icon/control.png')
+    # cursor = pyglet.window.ImageMouseCursor(image, 16, 8)
+    # window.set_mouse_cursor(cursor)
 
-    #window = pyglet.window.Window()
-    #cursor = pyglet.window.ImageMouseCursor(image, 16, 8)
-    #cursor = window.get_system_mouse_cursor(window.CURSOR_DEFAULT)
-    #window.set_mouse_cursor(cursor)
+    # window = pyglet.window.Window()
+    # cursor = pyglet.window.ImageMouseCursor(image, 16, 8)
+    # cursor = window.get_system_mouse_cursor(window.CURSOR_DEFAULT)
+    # window.set_mouse_cursor(cursor)
 
     # dc = win32gui.GetDC(0)
     # red = win32api.RGB(255, 0, 0)
@@ -34,6 +37,11 @@ def change_mouse_cursor():
 
     # canvas = tk.Canvas(root)
     # canvas.config(cursor='circle')
+
+
+class MyPopup(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
 
 
 class MoveMouse:
@@ -83,11 +91,20 @@ class MoveMouse:
 
             if len(x_differences) and len(y_differences):
                 if not x_cond and not y_cond:
-                    change_mouse_cursor()
+                    # change_mouse_cursor()
+                    self.open_popup()
                     self.mouse.click(Button.left, 1)  # todo: change mouse and detect click gesture
 
     def center_mouse(self):
-        self.mouse.position = (self.width/2, self.height/2)
+        self.mouse.position = (self.width / 2, self.height / 2)
+
+    def open_popup(self):  # popup window as a click indicator
+        self.w = MyPopup()
+        self.w.setGeometry(QRect(self.mouse.position[0], self.mouse.position[1], 100, 100))
+        self.w.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.w.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+
+        self.w.show()
 
     def detect_head_nod(self):
         pass  # todo
