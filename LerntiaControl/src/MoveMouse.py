@@ -1,13 +1,7 @@
-import pyglet as pyglet
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRect
 from PyQt5.QtWidgets import QWidget
-from pyglet import canvas
 from pynput.mouse import Button, Controller
-import tkinter as tk
-import win32gui
-import win32api
-import turtle
 from win32api import GetSystemMetrics
 
 x_sens = 0.5
@@ -17,27 +11,6 @@ y_step = 0.8
 numf = 10  # frame number
 pop_eps = 5
 mouse_position = (0, 0)
-
-def change_mouse_cursor():
-    pass
-    # image = pyglet.image.load('../icon/control.png')
-    # cursor = pyglet.window.ImageMouseCursor(image, 16, 8)
-    # window.set_mouse_cursor(cursor)
-
-    # window = pyglet.window.Window()
-    # cursor = pyglet.window.ImageMouseCursor(image, 16, 8)
-    # cursor = window.get_system_mouse_cursor(window.CURSOR_DEFAULT)
-    # window.set_mouse_cursor(cursor)
-
-    # dc = win32gui.GetDC(0)
-    # red = win32api.RGB(255, 0, 0)
-    # win32gui.SetPixel(dc, 50, 20, red)  # draw red at 0,0
-
-    # root = tk.Tk()
-    # root.bind("<Motion>", motion)
-
-    # canvas = tk.Canvas(root)
-    # canvas.config(cursor='circle')
 
 
 class MyPopup(QWidget):
@@ -54,13 +27,11 @@ class MoveMouse:
         self.width = GetSystemMetrics(0)
         self.height = GetSystemMetrics(1)
         self.wait_for_click = False
+        self.nod_detected = False
 
     def set_data(self, prev_data, data):
         self.prev_data = prev_data
         self.data = data
-
-    def get_wait(self):
-        return self.wait
 
     def move_mouse(self):
         print("data: ", self.data.x_middle)
@@ -100,9 +71,7 @@ class MoveMouse:
 
             if len(x_differences) and len(y_differences):
                 if not x_cond and not y_cond:
-                    # change_mouse_cursor()
                     self.open_popup()
-                    # self.mouse.click(Button.left, 1)  # todo: change mouse and detect click gesture
                     self.save_mouse_position()
 
     def center_mouse(self):
@@ -123,10 +92,20 @@ class MoveMouse:
         global mouse_position
         self.mouse.position = mouse_position
 
-    def detect_head_nod(self):
+    def detect_head_nod(self, click_data):
         self.lock_mouse_position()
-        nod_detected = True  # todo: detect: nod
-        if nod_detected:
+
+        y_differences = []
+        for d in click_data:
+            y_differences.append(self.data.y_middle - d.y_middle)
+
+        y_value = sum(y_differences) / len(y_differences)
+        self.nod_detected = y_value < y_sens or y_value > -y_sens
+        if self.nod_detected:
             self.mouse.click(Button.left, 1)
+            print("nod detected!")
+        else:
+            print("no nod")
+
         self.wait_for_click = False
         self.w.close()

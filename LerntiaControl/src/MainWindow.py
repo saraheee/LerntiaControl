@@ -1,22 +1,16 @@
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
-import subprocess
 import sys
-import time
 
 import cv2
-import win32gui
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt, QProcess
-from PyQt5.QtGui import QPixmap, QWindow
-from PyQt5.QtWidgets import QLabel, QApplication
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QPoint, Qt, QTimer
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QPalette, QBrush, QPen
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QLabel
 from imutils.video import FPS
 
-from src.ProcessImage import ProcessImage
 from src.MoveMouse import MoveMouse
+from src.ProcessImage import ProcessImage
 
 default_image = '../icon/control-teaser'
 
@@ -27,9 +21,13 @@ eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
 # models used for enhanced face detection
 net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_300x300_ssd_iter_140000.caffemodel')
 
+# number of frames for click detection
+clickf = 10
+
 started = False
 show_fps = False
 ui = 0
+
 
 print("Welcome to LerntiaControl!")
 print("OpenCV Version: ", cv2.__version__)
@@ -61,6 +59,8 @@ def on_click():
 
         prev_data = []
         data = []
+        click_data = []
+        click_counter = 0
         m = MoveMouse(prev_data, data)
         m.center_mouse()
 
@@ -81,15 +81,24 @@ def on_click():
             data = img.detect_face_and_eyes_enhanced(net, cv2.CascadeClassifier(eye_model))
 
             # move mouse
-            m.set_data(prev_data, data)
             if m.wait_for_click:
-                m.detect_head_nod()
+
+                # collect frames needed
+                if click_counter < clickf:
+                    click_data.append(data)
+                    click_counter = click_counter + 1
+                else:
+                    # analyze mouse clicks
+                    m.detect_head_nod(click_data)
+                    click_counter = 0
+                    click_data = []
+                    if m.nod_detected:
+                        prev_data = []
+                        m.nod_detected = False
             else:
+                m.set_data(prev_data, data)
                 m.move_mouse()
             prev_data.append(data)
-
-            # perform mouse clicks
-            # todo
 
             # convert frame to qt format and display image in main window
             set_image_in_main_window(data.frame)
@@ -110,11 +119,8 @@ def on_click():
                 # print("INFO: Elapsed time: {:.2f}".format(fps.elapsed()))
                 print("INFO: ~FPS: {:.2f}".format(fps.fps()))
 
-            # QApplication.setOverrideCursor(Qt.WaitCursor)
-
             # if ESC, or pause-button pressed, or window closed => release camera handle and close image window
             if cv2.waitKey(1) == 27 or started is False or cv2.getWindowProperty(img, cv2.WND_PROP_VISIBLE) < 1:
-                # QApplication.restoreOverrideCursor()
                 cap.release()
                 cv2.destroyAllWindows()
                 activate_pause_button()
