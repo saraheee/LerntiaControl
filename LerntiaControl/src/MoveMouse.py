@@ -83,6 +83,7 @@ class MoveMouse:
         self.w.setGeometry(QRect(self.mouse.position[0] + pop_eps, self.mouse.position[1] + pop_eps, 50, 50))
         self.w.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.FramelessWindowHint)
         self.wait_for_click = True
+        self.w.setStyleSheet("background-color: darkgray;")
         self.w.show()
 
     def save_mouse_position(self):
@@ -108,8 +109,11 @@ class MoveMouse:
         if self.nod_detected:
             self.mouse.click(Button.left, 1)
             print("nod detected!")
+            self.w.setStyleSheet("background-color: darkgreen;")
+            self.w.show()
+
         else:
             print("no nod")
-
+            self.w.setStyleSheet("background-color: darkred;")
+            self.w.show()
         self.wait_for_click = False
-        self.w.close()

@@ -16,8 +16,11 @@ eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
 net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_300x300_ssd_iter_140000.caffemodel')
 
 started = False
+# number of frames for click detection
+clickf = 10
+
+nod_shake_mode = False
 show_fps = False
-ui = 0
 
 print("Welcome to LerntiaControl!")
 print("OpenCV Version: ", cv2.__version__)
@@ -42,6 +45,11 @@ if not cv2.CascadeClassifier(eye_model):
     print("ERROR: Failed to load eye detector!")
 
 prev_data = []
+data = []
+click_data = []
+click_counter = 0
+m = MoveMouse(prev_data, data)
+m.center_mouse()
 started = True
 
 while cap.isOpened():
@@ -61,15 +69,26 @@ while cap.isOpened():
     data = img.detect_face_and_eyes_enhanced(net, cv2.CascadeClassifier(eye_model))
 
     # move mouse
-    if len(prev_data):
-        m = MoveMouse(prev_data, data)
+    if m.wait_for_click:
+
+        # collect frames needed
+        if click_counter < clickf:
+            click_data.append(data)
+            click_counter = click_counter + 1
+        else:
+            # analyze mouse clicks
+            m.detect_head_nod(click_data)
+            click_counter = 0
+            click_data = []
+            if m.nod_detected:
+                prev_data = []
+                m.nod_detected = False
+    else:
+        m.set_data(prev_data, data)
         m.move_mouse()
     prev_data.append(data)
 
-    # perform mouse clicks
-    # todo
-
-    # display mirrored frame in new window
+    # display frame in new window
     img = '[LerntiaControl] Kamerabild'
     cv2.imshow(img, data.frame)
     fps.update()

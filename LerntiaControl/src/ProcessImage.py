@@ -178,7 +178,7 @@ class ProcessImage:
         else:
             if len(faces) > 0:
                 for (x, y, w, h) in faces:  # relevant only if a face but no eyes are recognized
-                    middle_point = int(round((x + (x + w)) / 2)), int(round((y + (y + h)) / 2))
+                    middle_point = int(round((x + (x + w)) / 2)), int(round((y + (y + h)) / 2)) - 2*face_eps
             if not len(middle_point) > 0:  # no middle point retrieved before, if no face and no eyes are found
                 middle_point = (0, 0)
         cv2.circle(self.frame, middle_point, 10, face_middle_color, -1)
