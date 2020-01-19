@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QLabel
 from imutils.video import FPS
 
 from src.MoveMouse import MoveMouse
+from src.NodShakeMode import NodShakeMode
 from src.ProcessImage import ProcessImage
 
 default_image = '../icon/control-teaser'
@@ -24,10 +25,10 @@ net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_3
 # number of frames for click detection
 clickf = 10
 
+nod_shake_mode = False
 started = False
 show_fps = False
 ui = 0
-
 
 print("Welcome to LerntiaControl!")
 print("OpenCV Version: ", cv2.__version__)
@@ -65,6 +66,8 @@ def on_click():
         m = MoveMouse(prev_data, data)
         m.center_mouse()
 
+        mode2 = NodShakeMode(prev_data, data)
+
         while cap.isOpened():
             # capture frame
             ret, rgb_frame = cap.read()
@@ -81,24 +84,29 @@ def on_click():
             # data = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
             data = img.detect_face_and_eyes_enhanced(net, cv2.CascadeClassifier(eye_model))
 
-            # move mouse
-            if m.wait_for_click:
+            if nod_shake_mode:  # navigate only through head-nod and head-shake (two gestures mode)
+                mode2.set_data(prev_data, data)
+                mode2.apply()
 
-                # collect frames needed
-                if click_counter < clickf:
-                    click_data.append(data)
-                    click_counter = click_counter + 1
+            else:  # normal mode with mouse movement
+                # move mouse
+                if m.wait_for_click:
+
+                    # collect frames needed
+                    if click_counter < clickf:
+                        click_data.append(data)
+                        click_counter = click_counter + 1
+                    else:
+                        # analyze mouse clicks
+                        m.detect_head_nod(click_data)
+                        click_counter = 0
+                        click_data = []
+                        if m.nod_detected:
+                            prev_data = []
+                            m.nod_detected = False
                 else:
-                    # analyze mouse clicks
-                    m.detect_head_nod(click_data)
-                    click_counter = 0
-                    click_data = []
-                    if m.nod_detected:
-                        prev_data = []
-                        m.nod_detected = False
-            else:
-                m.set_data(prev_data, data)
-                m.move_mouse()
+                    m.set_data(prev_data, data)
+                    m.move_mouse()
             prev_data.append(data)
 
             # convert frame to qt format and display image in main window
@@ -132,8 +140,10 @@ def on_click():
 
 
 def set_image_in_main_window(frame):
+    global nod_shake_mode
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    cv2.putText(rgb_image, "CAMERA ", (30, 80), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (150, 255, 0), 6)
+    cv2.putText(rgb_image, ("Modus: 2 Gesten" if nod_shake_mode else "Modus: Normal"), (30, 80), cv2.FONT_HERSHEY_SIMPLEX,
+                2.0, (150, 255, 0), 6)
     h, w, ch = rgb_image.shape
     bytes_per_line = ch * w
     convert_to_qt_format = QtGui.QImage(rgb_image.data, w, h, bytes_per_line, QtGui.QImage.Format_RGB888)
@@ -160,6 +170,12 @@ def set_image(img):
     status_img = QPixmap(img)
     ui.camera_view.setPixmap(QPixmap(status_img))
     ui.camera_view.setScaledContents(True)
+
+
+def change_mode():
+    global nod_shake_mode
+    nod_shake_mode = not nod_shake_mode
+    print("mode changed to:", "nod-shake" if nod_shake_mode else "normal")
 
 
 class Ui_MainWindow(object):
@@ -216,10 +232,11 @@ class Ui_MainWindow(object):
         main_window.setWindowTitle(_translate("MainWindow", "Status"))
         self.start_button.setText(_translate("MainWindow", "Start"))
         self.menu.setTitle(_translate("MainWindow", "Menü"))
-        self.do_something.setText(_translate("MainWindow", "Klick"))
+        self.do_something.setText(_translate("MainWindow", "Modus ändern"))
 
         # connect signals to slots
         self.start_button.clicked.connect(on_click)
+        self.do_something.triggered.connect(change_mode)
 
 
 if __name__ == "__main__":
