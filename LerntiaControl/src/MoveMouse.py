@@ -10,7 +10,9 @@ x_step = 1.1
 y_step = 0.8
 numf = 10  # frame number
 pop_eps = 5
+nod_diff_eps = 4
 mouse_position = (0, 0)
+nod_threshold = 10
 
 
 class MyPopup(QWidget):
@@ -34,9 +36,8 @@ class MoveMouse:
         self.data = data
 
     def move_mouse(self):
-        print("data: ", self.data.x_middle)
-
-        print("Current mouse position: " + str(self.mouse.position))
+        # print("data: ", self.data.x_middle)
+        # print("Current mouse position: " + str(self.mouse.position))
 
         # consider last 'numf' frames
         if self.prev_data:
@@ -54,16 +55,16 @@ class MoveMouse:
             y_cond = []
 
             if len(x_differences):
-                print("x len: ", len(x_differences))
-                print("x val: ", sum(x_differences) / len(x_differences))
+                # print("x len: ", len(x_differences))
+                # print("x val: ", sum(x_differences) / len(x_differences))
                 x_value = sum(x_differences) / len(x_differences) * x_step
                 x_cond = x_value > x_sens or x_value < -x_sens
                 if x_cond:
                     self.mouse.move(x_value, 0)
 
             if len(y_differences):
-                print("y len: ", len(x_differences))
-                print("y val: ", sum(x_differences) / len(x_differences))
+                # print("y len: ", len(x_differences))
+                # print("y val: ", sum(x_differences) / len(x_differences))
                 y_value = sum(y_differences) / len(y_differences) * y_step
                 y_cond = y_value > y_sens or y_value < -y_sens
                 if y_cond:
@@ -95,12 +96,15 @@ class MoveMouse:
     def detect_head_nod(self, click_data):
         self.lock_mouse_position()
 
+        x_differences = []
         y_differences = []
         for d in click_data:
-            y_differences.append(self.data.y_middle - d.y_middle)
+            x_differences.append(abs(self.data.x_middle - d.x_middle))
+            y_differences.append(abs(self.data.y_middle - d.y_middle))
 
-        y_value = sum(y_differences) / len(y_differences)
-        self.nod_detected = y_value < y_sens or y_value > -y_sens
+        self.nod_detected = sum(y_differences) > sum(x_differences) + nod_diff_eps
+        print("y differences: ", sum(y_differences))
+
         if self.nod_detected:
             self.mouse.click(Button.left, 1)
             print("nod detected!")

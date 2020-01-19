@@ -208,15 +208,6 @@ class Ui_MainWindow(object):
         self.retranslate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
-        # subprocess.call(['java', '-jar', 'lerntia.jar'])
-        # hwnd = win32gui.FindWindowEx(0, 0, "Lerntia", "Lerntia")
-        # time.sleep(0.05)
-        # window = QWindow.fromWinId(hwnd)
-        # window.createWindowContainer(window, self)
-        # window.setGeometry(500, 500, 450, 400)
-        # window.setWindowTitle('File dialog')
-        # window.show()
-
     def retranslate_ui(self, main_window):
         global ui
         ui = self

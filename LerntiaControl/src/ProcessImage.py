@@ -27,9 +27,6 @@ class ProcessImage:
         left_ew = 0
         left_eh = 0
 
-        cut_face = self.frame
-        cut_eye = self.frame
-
         # objects = cv2.CascadeClassifier.detectMultiScale(image, scaleFactor, minNeighbors, flags, minSize, maxSize)
         faces = face_classifier.detectMultiScale(self.frame, 1.35, 5)
         for (x, y, w, h) in faces:
@@ -58,7 +55,7 @@ class ProcessImage:
             if cut_eye.size:
                 cv2.imshow("cut_eye", cut_eye)
 
-        return ProcessedImage(self.frame, cut_face, cut_eye, left_ex, left_ey)
+        return ProcessedImage(self.frame, left_ex, left_ey)
 
     def detect_face_and_eyes_enhanced(self, net, eye_classifier):
         left_ey = 0
@@ -69,7 +66,6 @@ class ProcessImage:
         right_eh = 0
 
         cut_face = self.frame
-        # cut_eye = self.frame
         cut_left_eye = self.frame
         cut_right_eye = self.frame
 
@@ -92,8 +88,6 @@ class ProcessImage:
                 text = "Face: {:.2f}%".format(confidence * 100)
                 y = startY - face_eps if startY - face_eps > 10 else startY + face_eps
 
-                print("END X: ", endX)
-
                 # left face half
                 cv2.rectangle(self.frame, (startX, startY), (endX - int((endX - startX) / 2) + face_eps, endY),
                               face_left_color, 4)
@@ -115,16 +109,12 @@ class ProcessImage:
         x_left_face = 0
         y_left_face = 0
         for (x, y, w, h) in left_faces:
-            # todo: move to method
-            print("x, y, w, h: ", x, y, w, h)
 
             # detect eyes
             roi = self.frame[y:y + h, x:x + w]
             eyes = eye_classifier.detectMultiScale(roi)
             i = 0
             for (ex, ey, ew, eh) in eyes:
-                # cv2.rectangle(roi, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
-
                 # get most left eye by x-coordinate
                 if ex < left_ex:
                     left_ex = ex
@@ -148,16 +138,11 @@ class ProcessImage:
         x_right_face = 0
         y_right_face = 0
         for (x, y, w, h) in right_faces:
-            # todo: move to method
-            print("x, y, w, h: ", x, y, w, h)
-
             # detect eyes
             roi = self.frame[y:y + h, x:x + w]
             eyes = eye_classifier.detectMultiScale(roi)
             i = 0
             for (ex, ey, ew, eh) in eyes:
-                # cv2.rectangle(roi, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
-
                 # get most right eye by x-coordinate
                 if ex > right_ex:
                     right_ex = ex
@@ -168,8 +153,7 @@ class ProcessImage:
                     y_right_face = y
                 i = i + 1
             if right_ex > 0:
-                cv2.rectangle(roi, (right_ex, right_ey), (right_ex + right_ew, right_ey + right_eh), face_right_color,
-                              4)
+                cv2.rectangle(roi, (right_ex, right_ey), (right_ex+right_ew, right_ey+right_eh), face_right_color, 4)
 
             # cut face and eye out of the image
             cut_right_face = self.frame[y:y + h, x:x + w]
@@ -179,11 +163,6 @@ class ProcessImage:
 
         global middle_point
         if left_ex < sys.maxsize and right_ex > 0:
-            # cv2.circle(self.frame, (int(round((left_ex+right_ex)/2)), int(round((left_ey+right_ey)/2))), 25,
-            # (255, 0, 0), -1)
-
-            print("leftex: ", left_ex)
-            print("leftey: ", left_ey)
 
             # point for left eye
             left_point = (x_left_face + left_ex, y_left_face + left_ey + int(round(left_eh / 2)))
@@ -193,11 +172,10 @@ class ProcessImage:
             right_point = (x_right_face + right_ex + right_ew, y_right_face + right_ey + int(round(right_eh / 2)))
             cv2.circle(self.frame, right_point, 10, face_right_color, -1)
 
-            middle_point = int(round((left_point[0] + right_point[0]) / 2)), \
+            middle_point = int(round((left_point[0] + right_point[0]) / 2)),\
                            int(round((left_point[1] + right_point[1]) / 2))
-            # cv2.circle(self.frame, middle_point, 10, face_middle_color, -1)
 
-            cv2.imshow("cut_face: ", cut_face)
+            # cv2.imshow("cut_face: ", cut_face)
 
         elif not len(middle_point) > 0:  # no middle point retrieved before
             middle_point = (0, 0)
