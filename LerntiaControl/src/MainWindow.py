@@ -40,6 +40,7 @@ def on_click():
         activate_start_button()
 
         cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to usb camera
+        # cap = cv2.VideoCapture('../model/test.mp4')
         if not cap.isOpened():
             print("WARNING: Failed to connect to usb camera! Connecting to internal camera instead.")
             cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # connect to internal camera

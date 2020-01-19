@@ -97,7 +97,7 @@ class ProcessImage:
                               face_right_color, 4)
                 # cv2.rectangle(self.frame, (x, y), (x + w, y + h), face_color, 4)
 
-                # faces.append([startX, startY, endX - startX, endY - startY])
+                faces.append([startX, startY, endX - startX, endY - startY])
                 left_faces.append(
                     [startX, startY, (endX - int((endX - startX) / 2) + face_eps - startX), endY - startY])
                 right_faces.append([startX + int((endX - startX) / 2) - face_eps, startY, endX - startX, endY - startY])
@@ -174,12 +174,13 @@ class ProcessImage:
 
             middle_point = int(round((left_point[0] + right_point[0]) / 2)),\
                            int(round((left_point[1] + right_point[1]) / 2))
-
             # cv2.imshow("cut_face: ", cut_face)
-
-        elif not len(middle_point) > 0:  # no middle point retrieved before
-            middle_point = (0, 0)
-
+        else:
+            if len(faces) > 0:
+                for (x, y, w, h) in faces:  # relevant only if a face but no eyes are recognized
+                    middle_point = int(round((x + (x + w)) / 2)), int(round((y + (y + h)) / 2))
+            if not len(middle_point) > 0:  # no middle point retrieved before, if no face and no eyes are found
+                middle_point = (0, 0)
         cv2.circle(self.frame, middle_point, 10, face_middle_color, -1)
 
         return ProcessedImage(self.frame, middle_point[0], middle_point[1])
