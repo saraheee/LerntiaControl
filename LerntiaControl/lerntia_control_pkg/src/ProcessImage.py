@@ -153,7 +153,8 @@ class ProcessImage:
                     y_right_face = y
                 i = i + 1
             if right_ex > 0:
-                cv2.rectangle(roi, (right_ex, right_ey), (right_ex+right_ew, right_ey+right_eh), face_right_color, 4)
+                cv2.rectangle(roi, (right_ex, right_ey), (right_ex + right_ew, right_ey + right_eh), face_right_color,
+                              4)
 
             # cut face and eye out of the image
             cut_right_face = self.frame[y:y + h, x:x + w]
@@ -172,13 +173,13 @@ class ProcessImage:
             right_point = (x_right_face + right_ex + right_ew, y_right_face + right_ey + int(round(right_eh / 2)))
             cv2.circle(self.frame, right_point, 10, face_right_color, -1)
 
-            middle_point = int(round((left_point[0] + right_point[0]) / 2)),\
-                           int(round((left_point[1] + right_point[1]) / 2))
-            # cv2.imshow("cut_face: ", cut_face)
+            middle_point = int(round((left_point[0] + right_point[0]) / 2)), int(round((left_point[1] + right_point[1])
+                                                                                       / 2))
+            cv2.imshow("cut_face: ", cut_face)
         else:
             if len(faces) > 0:
                 for (x, y, w, h) in faces:  # relevant only if a face but no eyes are recognized
-                    middle_point = int(round((x + (x + w)) / 2)), int(round((y + (y + h)) / 2)) - 2*face_eps
+                    middle_point = int(round((x + (x + w)) / 2)), int(round((y + (y + h)) / 2)) - 2 * face_eps
             if not len(middle_point) > 0:  # no middle point retrieved before, if no face and no eyes are found
                 middle_point = (0, 0)
         cv2.circle(self.frame, middle_point, 10, face_middle_color, -1)
@@ -191,8 +192,3 @@ class ProcessedImage:
         self.frame = frame
         self.x_middle = x_middle
         self.y_middle = y_middle
-
-
-class EnhancedProcessing:
-    def __init__(self, frame):
-        self.frame = frame

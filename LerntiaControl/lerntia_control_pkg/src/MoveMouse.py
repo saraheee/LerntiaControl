@@ -110,10 +110,9 @@ class MoveMouse:
             self.mouse.click(Button.left, 1)
             print("nod detected!")
             self.w.setStyleSheet("background-color: darkgreen;")
-            self.w.show()
 
         else:
             print("no nod")
             self.w.setStyleSheet("background-color: darkred;")
-            self.w.show()
+
         self.wait_for_click = False
