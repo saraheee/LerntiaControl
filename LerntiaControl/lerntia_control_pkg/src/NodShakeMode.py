@@ -1,3 +1,5 @@
+from pynput.keyboard import Key, Controller
+
 num_frames = 20
 nod_diff_eps = 150
 shake_diff_eps = 200
@@ -10,6 +12,7 @@ class NodShakeMode:
         self.data = data
         self.nod_detected = False
         self.shake_detected = False
+        self.keyboard = Controller()
 
     def set_data(self, prev_data, data):
         self.prev_data = prev_data
@@ -35,11 +38,14 @@ class NodShakeMode:
 
         if self.nod_detected:
             print("nod detected!")
-            # todo: enter + tab
+            # click and go to next button
+            self.keyboard.press(Key.space)
+            self.keyboard.press(Key.tab)
 
         elif self.shake_detected:
             print("shake detected!")
-            # todo: tab
+            # go to next button
+            self.keyboard.press(Key.tab)
 
         # else:
             # print("nothing detected")

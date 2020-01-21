@@ -4,10 +4,10 @@ from PyQt5.QtWidgets import QWidget
 from pynput.mouse import Button, Controller
 from win32api import GetSystemMetrics
 
-x_sens = 0.5
-y_sens = 0.7
-x_step = 1.1
-y_step = 0.8
+x_sens = 0.7
+y_sens = 0.9
+x_step = 1.3
+y_step = 1.5
 numf = 10  # frame number
 pop_eps = 5
 nod_diff_eps = 4
@@ -109,6 +109,7 @@ class MoveMouse:
         if self.nod_detected:
             self.mouse.click(Button.left, 1)
             print("nod detected!")
+            self.center_mouse()
             self.w.setStyleSheet("background-color: darkgreen;")
 
         else:
