@@ -175,7 +175,7 @@ class ProcessImage:
 
             middle_point = int(round((left_point[0] + right_point[0]) / 2)), int(round((left_point[1] + right_point[1])
                                                                                        / 2))
-            cv2.imshow("cut_face: ", cut_face)
+            # cv2.imshow("cut_face: ", cut_face)
         else:
             if len(faces) > 0:
                 for (x, y, w, h) in faces:  # relevant only if a face but no eyes are recognized

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
+import configparser
+import re
 import sys
 
 import cv2
@@ -25,6 +27,9 @@ net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_3
 # number of frames for click detection
 clickf = 10
 
+# path of the configuration file
+config_path = r'../control.config'
+
 nod_shake_mode = False
 started = False
 show_fps = False
@@ -33,6 +38,25 @@ ui = 0
 print("Welcome to LerntiaControl!")
 print("OpenCV Version: ", cv2.__version__)
 print("Python Version: ", sys.version, '\n')
+
+
+def set_config_parameters():
+    global clickf, nod_shake_mode
+    config_parser = configparser.RawConfigParser()
+    config_parser.read(config_path)
+
+    value = get_value(config_parser, 'frames', 'clickf')
+    if value and int(value) > 0:
+        clickf = int(value)
+
+    value = get_value(config_parser, 'mode', 'nod_shake_mode')
+    nod_shake_mode = bool(int(value))
+
+
+def get_value(parser, section, var):
+    value = parser.get(section, var)
+    value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
+    return value
 
 
 def on_click():
@@ -224,6 +248,7 @@ class Ui_MainWindow(object):
 
         self.retranslate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
+        set_config_parameters()
 
     def retranslate_ui(self, main_window):
         global ui

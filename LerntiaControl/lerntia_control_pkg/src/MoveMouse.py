@@ -1,23 +1,59 @@
+import configparser
+import re
+
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRect
 from PyQt5.QtWidgets import QWidget
 from pynput.mouse import Button, Controller
 from win32api import GetSystemMetrics
 
-x_sens = 0.7
-y_sens = 0.9
-x_step = 1.3
-y_step = 1.5
-numf = 10  # frame number
+x_sens = 0.7  # sensitivity in x direction
+y_sens = 0.9  # sensitivity in y direction
+x_step = 1.3  # movement steps in x direction
+y_step = 1.5  # movement steps in y direction
+numf = 10  # frame number for mouse movement
+
 pop_eps = 5
 nod_diff_eps = 4
 mouse_position = (0, 0)
-nod_threshold = 10
+config_path = r'../control.config'
 
 
 class MyPopup(QWidget):
     def __init__(self):
         QWidget.__init__(self)
+
+
+def set_config_parameters():
+    global x_sens, y_sens, x_step, y_step, numf
+    config_parser = configparser.RawConfigParser()
+    config_parser.read(config_path)
+
+    value = get_value(config_parser, 'sensitivity', 'x_sens')
+    if value and float(value) > 0:
+        x_sens = float(value)
+
+    value = get_value(config_parser, 'sensitivity', 'y_sens')
+    if value and float(value) > 0:
+        y_sens = float(value)
+
+    value = get_value(config_parser, 'steps', 'x_step')
+    if value and float(value) > 0:
+        x_step = float(value)
+
+    value = get_value(config_parser, 'steps', 'y_step')
+    if value and float(value) > 0:
+        y_step = float(value)
+
+    value = get_value(config_parser, 'frames', 'numf')
+    if value and int(value) > 0:
+        numf = int(value)
+
+
+def get_value(parser, section, var):
+    value = parser.get(section, var)
+    value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
+    return value
 
 
 class MoveMouse:
@@ -30,6 +66,7 @@ class MoveMouse:
         self.height = GetSystemMetrics(1)
         self.wait_for_click = False
         self.nod_detected = False
+        set_config_parameters()
 
     def set_data(self, prev_data, data):
         self.prev_data = prev_data
