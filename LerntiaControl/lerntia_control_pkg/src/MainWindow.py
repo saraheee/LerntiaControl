@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
 import sys
-import time
 
 import cv2
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -23,8 +22,8 @@ eye_model = '../model/haarcascades/haarcascade_eye_tree_eyeglasses.xml'
 # models used for enhanced face detection
 net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_300x300_ssd_iter_140000.caffemodel')
 
-# number of seconds for click detection
-click_sec = 4.5
+# number of frames for click detection
+clickf = 10
 
 nod_shake_mode = False
 started = False
@@ -63,11 +62,11 @@ def on_click():
         prev_data = []
         data = []
         click_data = []
+        click_counter = 0
         m = MoveMouse(prev_data, data)
         m.center_mouse()
 
         mode2 = NodShakeMode(prev_data, data)
-        start = time.time()
 
         while cap.isOpened():
             # capture frame
@@ -85,7 +84,6 @@ def on_click():
             # data = img.detect_face_and_eyes(cv2.CascadeClassifier(face_model), cv2.CascadeClassifier(eye_model))
             data = img.detect_face_and_eyes_enhanced(net, cv2.CascadeClassifier(eye_model))
 
-            end = time.time()
             if nod_shake_mode:  # navigate only through head-nod and head-shake (two gestures mode)
                 mode2.set_data(prev_data, data)
                 mode2.apply()
@@ -94,14 +92,15 @@ def on_click():
                 # move mouse
                 if m.wait_for_click:
 
-                    # collect data needed in the time defined
-                    if end-start <= click_sec:
+                    # collect frames needed
+                    if click_counter < clickf:
                         click_data.append(data)
+                        click_counter = click_counter + 1
                     else:
                         # analyze mouse clicks
                         m.detect_head_nod(click_data)
+                        click_counter = 0
                         click_data = []
-                        start = time.time()
                         if m.nod_detected:
                             prev_data = []
                             m.nod_detected = False
