@@ -29,6 +29,7 @@ clickf = 10
 
 # path of the configuration file
 config_path = r'../control.config'
+css = "../ui/style.css"
 
 nod_shake_mode = False
 started = False
@@ -41,6 +42,10 @@ print("Python Version: ", sys.version, '\n')
 
 
 def set_config_parameters():
+    """
+    Set parameters of the config file.
+    :return: None
+    """
     global clickf, nod_shake_mode
     config_parser = configparser.RawConfigParser()
     config_parser.read(config_path)
@@ -53,13 +58,35 @@ def set_config_parameters():
     nod_shake_mode = bool(int(value))
 
 
+def set_style_sheet(widget):
+    """
+    Set style sheet for a widget.
+    :param widget: the widget to be styled
+    :return:    None
+    """
+    with open(css, "r") as fh:
+        widget.setStyleSheet(fh.read())
+    fh.close()
+
+
 def get_value(parser, section, var):
+    """
+
+    :param parser:
+    :param section:
+    :param var:
+    :return:
+    """
     value = parser.get(section, var)
     value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
     return value
 
 
 def on_click():
+    """
+
+    :return:
+    """
     global started
     if not started:
         activate_start_button()
@@ -164,6 +191,11 @@ def on_click():
 
 
 def set_image_in_main_window(frame):
+    """
+
+    :param frame:
+    :return:
+    """
     global nod_shake_mode
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     cv2.putText(rgb_image, ("Modus: 2 Gesten" if nod_shake_mode else "Modus: Normal"), (30, 80),
@@ -176,6 +208,10 @@ def set_image_in_main_window(frame):
 
 
 def activate_pause_button():
+    """
+
+    :return:
+    """
     global started
     started = False
     ui.start_button.setText("Start")
@@ -184,6 +220,10 @@ def activate_pause_button():
 
 
 def activate_start_button():
+    """
+
+    :return:
+    """
     global started
     started = True
     ui.start_button.setText("Pause")
@@ -191,18 +231,30 @@ def activate_start_button():
 
 
 def set_image(img):
+    """
+
+    :param img:
+    :return:
+    """
     status_img = QPixmap(img)
     ui.camera_view.setPixmap(QPixmap(status_img))
     ui.camera_view.setScaledContents(True)
 
 
 def change_mode():
+    """
+
+    :return:
+    """
     global nod_shake_mode
     nod_shake_mode = not nod_shake_mode
     print("mode changed to:", "nod-shake" if nod_shake_mode else "normal")
 
 
 class Ui_MainWindow(object):
+    """
+
+    """
     def setup_ui(self, main_window):
         main_window.setObjectName("MainWindow")
         main_window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
@@ -249,8 +301,16 @@ class Ui_MainWindow(object):
         self.retranslate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
         set_config_parameters()
+        set_style_sheet(self.central_widget)
+        set_style_sheet(self.start_button)
+        set_style_sheet(self.menu_bar)
 
     def retranslate_ui(self, main_window):
+        """
+
+        :param main_window:
+        :return:
+        """
         global ui
         ui = self
         _translate = QtCore.QCoreApplication.translate

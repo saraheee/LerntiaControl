@@ -12,16 +12,33 @@ middle_point = []
 
 
 class ProcessImage:
+    """
+
+    """
 
     def __init__(self, frame):
+        """
+
+        :param frame:
+        """
         self.frame = frame
 
     def pre_processing(self):
+        """
+
+        :return:
+        """
         # self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
         self.frame = cv2.flip(self.frame, 1)
         return self.frame
 
     def detect_face_and_eyes(self, face_classifier, eye_classifier):
+        """
+
+        :param face_classifier:
+        :param eye_classifier:
+        :return:
+        """
         left_ex = sys.maxsize
         left_ey = 0
         left_ew = 0
@@ -58,6 +75,12 @@ class ProcessImage:
         return ProcessedImage(self.frame, left_ex, left_ey)
 
     def detect_face_and_eyes_enhanced(self, net, eye_classifier):
+        """
+
+        :param net:
+        :param eye_classifier:
+        :return:
+        """
         left_ey = 0
         right_ey = 0
         left_ew = 0
@@ -188,7 +211,16 @@ class ProcessImage:
 
 
 class ProcessedImage:
+    """
+
+    """
     def __init__(self, frame, x_middle, y_middle):
+        """
+
+        :param frame:
+        :param x_middle:
+        :param y_middle:
+        """
         self.frame = frame
         self.x_middle = x_middle
         self.y_middle = y_middle

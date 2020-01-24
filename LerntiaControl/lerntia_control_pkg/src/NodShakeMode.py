@@ -6,8 +6,16 @@ shake_diff_eps = 200
 
 
 class NodShakeMode:
+    """
+
+    """
 
     def __init__(self, prev_data, data):
+        """
+
+        :param prev_data:
+        :param data:
+        """
         self.prev_data = prev_data
         self.data = data
         self.nod_detected = False
@@ -15,10 +23,20 @@ class NodShakeMode:
         self.keyboard = Controller()
 
     def set_data(self, prev_data, data):
+        """
+
+        :param prev_data:
+        :param data:
+        :return:
+        """
         self.prev_data = prev_data
         self.data = data
 
     def apply(self):
+        """
+
+        :return:
+        """
         if self.prev_data and self.data:
             last_frames = self.prev_data[-num_frames:]
 

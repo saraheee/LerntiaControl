@@ -1,0 +1,33 @@
+
+/* general */
+* {
+	background: #ECE0F8;
+	color: #000000;
+}
+
+/* menu */
+QWidget::item:selected {
+	background: #ABAADB;
+}
+
+QMenu::separator {
+	background: #C0BFF2;
+}
+
+/* button */
+QAbstractButton {
+	background: #CECEE0;
+}
+
+QAbstractButton:hover {
+	background: #ABAADB;
+}
+
+QAbstractButton:selected {
+	background: #C0BFF2;
+}
+
+QAbstractButton:pressed {
+	background: #C0BFF2;
+}
+

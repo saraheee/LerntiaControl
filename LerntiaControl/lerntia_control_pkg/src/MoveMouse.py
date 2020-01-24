@@ -20,11 +20,21 @@ config_path = r'../control.config'
 
 
 class MyPopup(QWidget):
+    """
+
+    """
     def __init__(self):
+        """
+
+        """
         QWidget.__init__(self)
 
 
 def set_config_parameters():
+    """
+
+    :return:
+    """
     global x_sens, y_sens, x_step, y_step, numf
     config_parser = configparser.RawConfigParser()
     config_parser.read(config_path)
@@ -51,14 +61,29 @@ def set_config_parameters():
 
 
 def get_value(parser, section, var):
+    """
+
+    :param parser:
+    :param section:
+    :param var:
+    :return:
+    """
     value = parser.get(section, var)
     value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
     return value
 
 
 class MoveMouse:
+    """
+
+    """
 
     def __init__(self, prev_data, data):
+        """
+
+        :param prev_data:
+        :param data:
+        """
         self.prev_data = prev_data
         self.data = data
         self.mouse = Controller()
@@ -69,10 +94,20 @@ class MoveMouse:
         set_config_parameters()
 
     def set_data(self, prev_data, data):
+        """
+
+        :param prev_data:
+        :param data:
+        :return:
+        """
         self.prev_data = prev_data
         self.data = data
 
     def move_mouse(self):
+        """
+
+        :return:
+        """
         # print("data: ", self.data.x_middle)
         # print("Current mouse position: " + str(self.mouse.position))
 
@@ -113,9 +148,17 @@ class MoveMouse:
                     self.save_mouse_position()
 
     def center_mouse(self):
+        """
+
+        :return:
+        """
         self.mouse.position = (self.width / 2, self.height / 2)
 
     def open_popup(self):  # popup window as a click indicator
+        """
+
+        :return:
+        """
         self.w = MyPopup()
         self.w.setGeometry(QRect(self.mouse.position[0] + pop_eps, self.mouse.position[1] + pop_eps, 50, 50))
         self.w.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.FramelessWindowHint)
@@ -124,14 +167,27 @@ class MoveMouse:
         self.w.show()
 
     def save_mouse_position(self):
+        """
+
+        :return:
+        """
         global mouse_position
         mouse_position = self.mouse.position
 
     def lock_mouse_position(self):
+        """
+
+        :return:
+        """
         global mouse_position
         self.mouse.position = mouse_position
 
     def detect_head_nod(self, click_data):
+        """
+
+        :param click_data:
+        :return:
+        """
         self.lock_mouse_position()
 
         x_differences = []
