@@ -52,14 +52,17 @@
     <property name="title">
      <string>Menü</string>
     </property>
-    <addaction name="do_something"/>
+    <addaction name="change_mode"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="status_bar"/>
-  <action name="do_something">
+  <action name="change_mode">
    <property name="text">
-    <string>Do something</string>
+    <string>Modus ändern</string>
+   </property>
+   <property name="toolTip">
+    <string>Modus ändern</string>
    </property>
   </action>
  </widget>

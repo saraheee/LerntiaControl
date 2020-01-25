@@ -13,20 +13,23 @@ middle_point = []
 
 class ProcessImage:
     """
+    Process the image frame, detect face and eyes, and retrieve the middle point for consequent mouse and key actions.
 
     """
 
     def __init__(self, frame):
         """
+        The constructor that sets the initialization parameters for the class.
 
-        :param frame:
+        :param frame: the initial image frame to be processed
         """
         self.frame = frame
 
     def pre_processing(self):
         """
+        Conduct a preprocessing on the image frame.
 
-        :return:
+        :return: the preprocessed image frame
         """
         # self.frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
         self.frame = cv2.flip(self.frame, 1)
@@ -34,10 +37,12 @@ class ProcessImage:
 
     def detect_face_and_eyes(self, face_classifier, eye_classifier):
         """
+        Detect face and eyes in the image frame and return the data processed, as an image object.
+        This method is outdated. For enhanced results, the method `detect_face_and_eyes_enhanced` is used instead.
 
-        :param face_classifier:
-        :param eye_classifier:
-        :return:
+        :param face_classifier: the classifier for detecting the face
+        :param eye_classifier: the classifier for detecting eyes
+        :return: the data of the processed image frame
         """
         left_ex = sys.maxsize
         left_ey = 0
@@ -76,10 +81,13 @@ class ProcessImage:
 
     def detect_face_and_eyes_enhanced(self, net, eye_classifier):
         """
+        An enhanced method for face and eye detection. Faces are detected through a pretrained network. Every eye is
+        searched for separately in a vertical face half. The reference point is computed from both eye positions if
+        available, or estimated if no two eyes are detected.
 
-        :param net:
-        :param eye_classifier:
-        :return:
+        :param net: the network used for face detection
+        :param eye_classifier: the classifier used for eye detection
+        :return: the data of the processed image frame
         """
         left_ey = 0
         right_ey = 0
@@ -212,14 +220,17 @@ class ProcessImage:
 
 class ProcessedImage:
     """
+    The data of the processed image frame, which is calculated from face and eye positions.
 
     """
+
     def __init__(self, frame, x_middle, y_middle):
         """
+        The constructor that sets the initialization parameters for the processed image class.
 
-        :param frame:
-        :param x_middle:
-        :param y_middle:
+        :param frame: the processed frame after face and eye detection
+        :param x_middle: the x coordinate of the retrieved reference point
+        :param y_middle: the y coordinate of the retrieved reference point
         """
         self.frame = frame
         self.x_middle = x_middle

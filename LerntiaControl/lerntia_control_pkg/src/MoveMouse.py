@@ -21,10 +21,13 @@ config_path = r'../control.config'
 
 class MyPopup(QWidget):
     """
+    Define a popup window to show a visual feedback to the user.
 
     """
+
     def __init__(self):
         """
+        The constructor that sets the initialization parameters for the popup window.
 
         """
         QWidget.__init__(self)
@@ -32,8 +35,9 @@ class MyPopup(QWidget):
 
 def set_config_parameters():
     """
+    Set config parameters for the mouse movements.
 
-    :return:
+    :return: none
     """
     global x_sens, y_sens, x_step, y_step, numf
     config_parser = configparser.RawConfigParser()
@@ -62,11 +66,12 @@ def set_config_parameters():
 
 def get_value(parser, section, var):
     """
+    Get a value from the config file.
 
-    :param parser:
-    :param section:
-    :param var:
-    :return:
+    :param parser: the parser of the config file
+    :param section: the section that contains the entry
+    :param var: the variable that holds the value
+    :return: the retrieved value
     """
     value = parser.get(section, var)
     value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
@@ -75,11 +80,13 @@ def get_value(parser, section, var):
 
 class MoveMouse:
     """
+    Manage operations for performing mouse movements and mouse left clicks.
 
     """
 
     def __init__(self, prev_data, data):
         """
+        The constructor that sets the initialization parameters for mouse movement operations.
 
         :param prev_data:
         :param data:
@@ -95,18 +102,21 @@ class MoveMouse:
 
     def set_data(self, prev_data, data):
         """
+        Set data for the analysis of mouse movements and clicks.
 
-        :param prev_data:
-        :param data:
-        :return:
+        :param prev_data: the data of previous frames
+        :param data: the data of the active frame
+        :return: none
         """
         self.prev_data = prev_data
         self.data = data
 
     def move_mouse(self):
         """
+        Move mouse based on the direction and speed retrieved from the data analyzed.
+        Show a visual feedback as a popup window if the movement detected is in a certain range.
 
-        :return:
+        :return: none
         """
         # print("data: ", self.data.x_middle)
         # print("Current mouse position: " + str(self.mouse.position))
@@ -149,15 +159,17 @@ class MoveMouse:
 
     def center_mouse(self):
         """
+        Center the mouse position on the screen.
 
-        :return:
+        :return: none
         """
         self.mouse.position = (self.width / 2, self.height / 2)
 
-    def open_popup(self):  # popup window as a click indicator
+    def open_popup(self):
         """
+        Open a popup window as a click indicator
 
-        :return:
+        :return: none
         """
         self.w = MyPopup()
         self.w.setGeometry(QRect(self.mouse.position[0] + pop_eps, self.mouse.position[1] + pop_eps, 50, 50))
@@ -168,25 +180,30 @@ class MoveMouse:
 
     def save_mouse_position(self):
         """
+        Save the active mouse position globally.
 
-        :return:
+        :return: none
         """
         global mouse_position
         mouse_position = self.mouse.position
 
     def lock_mouse_position(self):
         """
+        Lock the active mouse position.
 
-        :return:
+        :return: none
         """
         global mouse_position
         self.mouse.position = mouse_position
 
     def detect_head_nod(self, click_data):
         """
+        Detect whether a head nod is performed and do a left mouse click if it is the case. A head nod is detected
+        when the weighted head movements in vertical position exceed the weighted movements in horizontal position
+        with more than a threshold defined.
 
-        :param click_data:
-        :return:
+        :param click_data: the frame data that is analyzed for nod detection
+        :return: none
         """
         self.lock_mouse_position()
 

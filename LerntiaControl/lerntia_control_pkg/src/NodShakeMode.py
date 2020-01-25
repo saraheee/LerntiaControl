@@ -7,11 +7,13 @@ shake_diff_eps = 200
 
 class NodShakeMode:
     """
+    A 2-gestures mode for performing key events through detecting head nods and head shakes.
 
     """
 
     def __init__(self, prev_data, data):
         """
+        The constructor that sets the initialization parameters for the 2-gestures mode.
 
         :param prev_data:
         :param data:
@@ -24,18 +26,21 @@ class NodShakeMode:
 
     def set_data(self, prev_data, data):
         """
+        Set data for the analysis of head nods and head shakes.
 
-        :param prev_data:
-        :param data:
-        :return:
+        :param prev_data: the data of previous frames
+        :param data: the data of the active frame
+        :return: none
         """
         self.prev_data = prev_data
         self.data = data
 
     def apply(self):
         """
+        The application method that detects head nods and shakes. If a nod or a shake is
+        detected, a key event is performed.
 
-        :return:
+        :return: none
         """
         if self.prev_data and self.data:
             last_frames = self.prev_data[-num_frames:]
@@ -66,5 +71,4 @@ class NodShakeMode:
             self.keyboard.press(Key.tab)
 
         # else:
-            # print("nothing detected")
-
+        # print("nothing detected")

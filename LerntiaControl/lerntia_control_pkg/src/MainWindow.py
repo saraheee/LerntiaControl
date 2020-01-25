@@ -44,7 +44,8 @@ print("Python Version: ", sys.version, '\n')
 def set_config_parameters():
     """
     Set parameters of the config file.
-    :return: None
+
+    :return: none
     """
     global clickf, nod_shake_mode
     config_parser = configparser.RawConfigParser()
@@ -61,8 +62,9 @@ def set_config_parameters():
 def set_style_sheet(widget):
     """
     Set style sheet for a widget.
+
     :param widget: the widget to be styled
-    :return:    None
+    :return: none
     """
     with open(css, "r") as fh:
         widget.setStyleSheet(fh.read())
@@ -71,11 +73,12 @@ def set_style_sheet(widget):
 
 def get_value(parser, section, var):
     """
+    Get a value from the config file.
 
-    :param parser:
-    :param section:
-    :param var:
-    :return:
+    :param parser: the parser of the config file
+    :param section: the section that contains the entry
+    :param var: the variable that holds the value
+    :return: the retrieved value
     """
     value = parser.get(section, var)
     value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
@@ -84,8 +87,11 @@ def get_value(parser, section, var):
 
 def on_click():
     """
+    The main method that is called, when the start button is clicked. It connects to the camera, and calls methods for
+    processing the camera image, for maintaining the mode, and for performing an action. In normal mode the actions are
+    taken through mouse movements and mouse left clicks, while in 2-gestures mode keyboard events are accomplished.
 
-    :return:
+    :return: none
     """
     global started
     if not started:
@@ -192,9 +198,11 @@ def on_click():
 
 def set_image_in_main_window(frame):
     """
+    Set the processed camera image in the main window of the user interface to show a status picture while using the
+    application. Print a text on the image frame that indicates the active mode.
 
-    :param frame:
-    :return:
+    :param frame: the processed image frame to set
+    :return: none
     """
     global nod_shake_mode
     rgb_image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -209,8 +217,9 @@ def set_image_in_main_window(frame):
 
 def activate_pause_button():
     """
+    Update the appearance of the pause button and show a default image when the application is stopped.
 
-    :return:
+    :return: none
     """
     global started
     started = False
@@ -221,8 +230,9 @@ def activate_pause_button():
 
 def activate_start_button():
     """
+    Update the appearance of the start button when the application is started.
 
-    :return:
+    :return: none
     """
     global started
     started = True
@@ -232,9 +242,10 @@ def activate_start_button():
 
 def set_image(img):
     """
+    Set an image in the user interface that indicates the current status.
 
-    :param img:
-    :return:
+    :param img: the image to set
+    :return: none
     """
     status_img = QPixmap(img)
     ui.camera_view.setPixmap(QPixmap(status_img))
@@ -243,18 +254,21 @@ def set_image(img):
 
 def change_mode():
     """
+    Change the active mode. There are two modes available: 'normal' and '2-gestures'.
 
-    :return:
+    :return: none
     """
     global nod_shake_mode
     nod_shake_mode = not nod_shake_mode
-    print("mode changed to:", "nod-shake" if nod_shake_mode else "normal")
+    print("mode changed to:", "2-gestures" if nod_shake_mode else "normal")
 
 
 class Ui_MainWindow(object):
     """
+    The main window of the user interface (ui). It defines all ui elements.
 
     """
+
     def setup_ui(self, main_window):
         main_window.setObjectName("MainWindow")
         main_window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
@@ -269,7 +283,7 @@ class Ui_MainWindow(object):
 
         self.camera_view = QLabel(self.central_widget)
         self.camera_view.setObjectName("camera_view")
-        self.vertical_layout.addWidget(self.camera_view)
+        self.vertical_layout.addWidget(self.camera_view, 0)
         self.verticalLayout_2.addLayout(self.vertical_layout)
         set_image(default_image)
 
@@ -279,7 +293,7 @@ class Ui_MainWindow(object):
         self.start_button.setFont(font)
         self.start_button.setAutoRepeatInterval(93)
         self.start_button.setObjectName("start_button")
-        self.verticalLayout_2.addWidget(self.start_button)
+        self.verticalLayout_2.addWidget(self.start_button, 0)
 
         main_window.setCentralWidget(self.central_widget)
 
@@ -288,14 +302,18 @@ class Ui_MainWindow(object):
         self.menu_bar.setObjectName("menu_bar")
         self.menu = QtWidgets.QMenu(self.menu_bar)
         self.menu.setObjectName("menu")
+        font.setPointSize(14)
+        self.menu_bar.setFont(font)
+        self.menu.setFont(font)
         main_window.setMenuBar(self.menu_bar)
+
         self.status_bar = QtWidgets.QStatusBar(main_window)
         self.status_bar.setObjectName("status_bar")
         main_window.setStatusBar(self.status_bar)
 
-        self.do_something = QtWidgets.QAction(main_window)
-        self.do_something.setObjectName("do_something")
-        self.menu.addAction(self.do_something)
+        self.change_mode = QtWidgets.QAction(main_window)
+        self.change_mode.setObjectName("change_mode")
+        self.menu.addAction(self.change_mode)
         self.menu_bar.addAction(self.menu.menuAction())
 
         self.retranslate_ui(main_window)
@@ -307,9 +325,10 @@ class Ui_MainWindow(object):
 
     def retranslate_ui(self, main_window):
         """
+        Retranslate the view of the ui.
 
-        :param main_window:
-        :return:
+        :param main_window: the main window of the ui
+        :return: none
         """
         global ui
         ui = self
@@ -317,11 +336,11 @@ class Ui_MainWindow(object):
         main_window.setWindowTitle(_translate("MainWindow", "Status"))
         self.start_button.setText(_translate("MainWindow", "Start"))
         self.menu.setTitle(_translate("MainWindow", "Menü"))
-        self.do_something.setText(_translate("MainWindow", "Modus ändern"))
+        self.change_mode.setText(_translate("MainWindow", "Modus ändern"))
 
         # connect signals to slots
         self.start_button.clicked.connect(on_click)
-        self.do_something.triggered.connect(change_mode)
+        self.change_mode.triggered.connect(change_mode)
 
 
 if __name__ == "__main__":
