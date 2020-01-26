@@ -11,9 +11,9 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QLabel
 from imutils.video import FPS
 
-from lerntia_control_pkg.src.MoveMouse import MoveMouse
-from lerntia_control_pkg.src.NodShakeMode import NodShakeMode
-from lerntia_control_pkg.src.ProcessImage import ProcessImage
+from MoveMouse import MoveMouse
+from NodShakeMode import NodShakeMode
+from ProcessImage import ProcessImage
 
 default_image = '../icon/control-teaser'
 
@@ -28,7 +28,7 @@ net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_3
 clickf = 10
 
 # path of the configuration file
-config_path = r'../control.config'
+config_path = r'../../config.yaml'
 css = "../ui/style.css"
 
 nod_shake_mode = False
@@ -270,6 +270,12 @@ class Ui_MainWindow(object):
     """
 
     def setup_ui(self, main_window):
+        """
+        Setup all ui elements.
+
+        :param main_window: the main window of the ui
+        :return: none
+        """
         main_window.setObjectName("MainWindow")
         main_window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         main_window.setWindowIcon(QtGui.QIcon('../icon/control.ico'))

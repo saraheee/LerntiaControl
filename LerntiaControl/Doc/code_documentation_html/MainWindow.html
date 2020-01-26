@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>MainWindow module &#8212; LerntiaControl  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MoveMouse module" href="MoveMouse.html" />
+    <link rel="prev" title="src" href="modules.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MoveMouse.html" title="MoveMouse module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="src"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">src</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-MainWindow">
+<span id="mainwindow-module"></span><h1>MainWindow module<a class="headerlink" href="#module-MainWindow" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="MainWindow.Ui_MainWindow">
+<em class="property">class </em><code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">Ui_MainWindow</code><a class="headerlink" href="#MainWindow.Ui_MainWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The main window of the user interface (ui). It defines all ui elements.</p>
+<dl class="method">
+<dt id="MainWindow.Ui_MainWindow.retranslate_ui">
+<code class="sig-name descname">retranslate_ui</code><span class="sig-paren">(</span><em class="sig-param">main_window</em><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.Ui_MainWindow.retranslate_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retranslate the view of the ui.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>main_window</strong> – the main window of the ui</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MainWindow.Ui_MainWindow.setup_ui">
+<code class="sig-name descname">setup_ui</code><span class="sig-paren">(</span><em class="sig-param">main_window</em><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.Ui_MainWindow.setup_ui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup all ui elements.</p>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>main_window</strong> – the main window of the ui</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.activate_pause_button">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">activate_pause_button</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.activate_pause_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the appearance of the pause button and show a default image when the application is stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.activate_start_button">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">activate_start_button</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.activate_start_button" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the appearance of the start button when the application is started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.change_mode">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">change_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.change_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the active mode. There are two modes available: ‘normal’ and ‘2-gestures’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.get_value">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">parser</em>, <em class="sig-param">section</em>, <em class="sig-param">var</em><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a value from the config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parser</strong> – the parser of the config file</p></li>
+<li><p><strong>section</strong> – the section that contains the entry</p></li>
+<li><p><strong>var</strong> – the variable that holds the value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the retrieved value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.on_click">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">on_click</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.on_click" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main method that is called, when the start button is clicked. It connects to the camera, and calls methods for
+processing the camera image, for maintaining the mode, and for performing an action. In normal mode the actions are
+taken through mouse movements and mouse left clicks, while in 2-gestures mode keyboard events are accomplished.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.set_config_parameters">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">set_config_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.set_config_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set parameters of the config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.set_image">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">set_image</code><span class="sig-paren">(</span><em class="sig-param">img</em><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.set_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set an image in the user interface that indicates the current status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>img</strong> – the image to set</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.set_image_in_main_window">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">set_image_in_main_window</code><span class="sig-paren">(</span><em class="sig-param">frame</em><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.set_image_in_main_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the processed camera image in the main window of the user interface to show a status picture while using the
+application. Print a text on the image frame that indicates the active mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>frame</strong> – the processed image frame to set</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MainWindow.set_style_sheet">
+<code class="sig-prename descclassname">MainWindow.</code><code class="sig-name descname">set_style_sheet</code><span class="sig-paren">(</span><em class="sig-param">widget</em><span class="sig-paren">)</span><a class="headerlink" href="#MainWindow.set_style_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set style sheet for a widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> – the widget to be styled</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">src</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="MoveMouse.html"
+                        title="next chapter">MoveMouse module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/MainWindow.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MoveMouse.html" title="MoveMouse module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="src"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >src</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sarah El-Sherbiny.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

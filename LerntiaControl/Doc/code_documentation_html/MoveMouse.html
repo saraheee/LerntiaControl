@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>MoveMouse module &#8212; LerntiaControl  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="NodShakeMode module" href="NodShakeMode.html" />
+    <link rel="prev" title="MainWindow module" href="MainWindow.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NodShakeMode.html" title="NodShakeMode module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="MainWindow.html" title="MainWindow module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">src</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-MoveMouse">
+<span id="movemouse-module"></span><h1>MoveMouse module<a class="headerlink" href="#module-MoveMouse" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="MoveMouse.MoveMouse">
+<em class="property">class </em><code class="sig-prename descclassname">MoveMouse.</code><code class="sig-name descname">MoveMouse</code><span class="sig-paren">(</span><em class="sig-param">prev_data</em>, <em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manage operations for performing mouse movements and mouse left clicks.</p>
+<dl class="method">
+<dt id="MoveMouse.MoveMouse.center_mouse">
+<code class="sig-name descname">center_mouse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse.center_mouse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Center the mouse position on the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MoveMouse.MoveMouse.detect_head_nod">
+<code class="sig-name descname">detect_head_nod</code><span class="sig-paren">(</span><em class="sig-param">click_data</em><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse.detect_head_nod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect whether a head nod is performed and do a left mouse click if it is the case. A head nod is detected
+when the weighted head movements in vertical position exceed the weighted movements in horizontal position
+with more than a threshold defined.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>click_data</strong> – the frame data that is analyzed for nod detection</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MoveMouse.MoveMouse.lock_mouse_position">
+<code class="sig-name descname">lock_mouse_position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse.lock_mouse_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lock the active mouse position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MoveMouse.MoveMouse.move_mouse">
+<code class="sig-name descname">move_mouse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse.move_mouse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move mouse based on the direction and speed retrieved from the data analyzed.
+Show a visual feedback as a popup window if the movement detected is in a certain range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MoveMouse.MoveMouse.open_popup">
+<code class="sig-name descname">open_popup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse.open_popup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a popup window as a click indicator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MoveMouse.MoveMouse.save_mouse_position">
+<code class="sig-name descname">save_mouse_position</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse.save_mouse_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the active mouse position globally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MoveMouse.MoveMouse.set_data">
+<code class="sig-name descname">set_data</code><span class="sig-paren">(</span><em class="sig-param">prev_data</em>, <em class="sig-param">data</em><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.MoveMouse.set_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set data for the analysis of mouse movements and clicks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prev_data</strong> – the data of previous frames</p></li>
+<li><p><strong>data</strong> – the data of the active frame</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="MoveMouse.MyPopup">
+<em class="property">class </em><code class="sig-prename descclassname">MoveMouse.</code><code class="sig-name descname">MyPopup</code><a class="headerlink" href="#MoveMouse.MyPopup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code></p>
+<p>Define a popup window to show a visual feedback to the user.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="MoveMouse.get_value">
+<code class="sig-prename descclassname">MoveMouse.</code><code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">parser</em>, <em class="sig-param">section</em>, <em class="sig-param">var</em><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a value from the config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parser</strong> – the parser of the config file</p></li>
+<li><p><strong>section</strong> – the section that contains the entry</p></li>
+<li><p><strong>var</strong> – the variable that holds the value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the retrieved value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="MoveMouse.set_config_parameters">
+<code class="sig-prename descclassname">MoveMouse.</code><code class="sig-name descname">set_config_parameters</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MoveMouse.set_config_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set config parameters for the mouse movements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="MainWindow.html"
+                        title="previous chapter">MainWindow module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="NodShakeMode.html"
+                        title="next chapter">NodShakeMode module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/MoveMouse.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NodShakeMode.html" title="NodShakeMode module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="MainWindow.html" title="MainWindow module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >src</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sarah El-Sherbiny.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

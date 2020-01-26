@@ -16,7 +16,7 @@ numf = 10  # frame number for mouse movement
 pop_eps = 5
 nod_diff_eps = 4
 mouse_position = (0, 0)
-config_path = r'../control.config'
+config_path = r'../../config.yaml'
 
 
 class MyPopup(QWidget):

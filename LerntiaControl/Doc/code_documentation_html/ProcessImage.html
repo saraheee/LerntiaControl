@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>ProcessImage module &#8212; LerntiaControl  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="NodShakeMode module" href="NodShakeMode.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NodShakeMode.html" title="NodShakeMode module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">src</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ProcessImage">
+<span id="processimage-module"></span><h1>ProcessImage module<a class="headerlink" href="#module-ProcessImage" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="ProcessImage.ProcessImage">
+<em class="property">class </em><code class="sig-prename descclassname">ProcessImage.</code><code class="sig-name descname">ProcessImage</code><span class="sig-paren">(</span><em class="sig-param">frame</em><span class="sig-paren">)</span><a class="headerlink" href="#ProcessImage.ProcessImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Process the image frame, detect face and eyes, and retrieve the middle point for consequent mouse and key actions.</p>
+<dl class="method">
+<dt id="ProcessImage.ProcessImage.detect_face_and_eyes">
+<code class="sig-name descname">detect_face_and_eyes</code><span class="sig-paren">(</span><em class="sig-param">face_classifier</em>, <em class="sig-param">eye_classifier</em><span class="sig-paren">)</span><a class="headerlink" href="#ProcessImage.ProcessImage.detect_face_and_eyes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect face and eyes in the image frame and return the data processed, as an image object.
+This method is outdated. For enhanced results, the method <cite>detect_face_and_eyes_enhanced</cite> is used instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>face_classifier</strong> – the classifier for detecting the face</p></li>
+<li><p><strong>eye_classifier</strong> – the classifier for detecting eyes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data of the processed image frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ProcessImage.ProcessImage.detect_face_and_eyes_enhanced">
+<code class="sig-name descname">detect_face_and_eyes_enhanced</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">eye_classifier</em><span class="sig-paren">)</span><a class="headerlink" href="#ProcessImage.ProcessImage.detect_face_and_eyes_enhanced" title="Permalink to this definition">¶</a></dt>
+<dd><p>An enhanced method for face and eye detection. Faces are detected through a pretrained network. Every eye is
+searched for separately in a vertical face half. The reference point is computed from both eye positions if
+available, or estimated if no two eyes are detected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> – the network used for face detection</p></li>
+<li><p><strong>eye_classifier</strong> – the classifier used for eye detection</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data of the processed image frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="ProcessImage.ProcessImage.pre_processing">
+<code class="sig-name descname">pre_processing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ProcessImage.ProcessImage.pre_processing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conduct a preprocessing on the image frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the preprocessed image frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ProcessImage.ProcessedImage">
+<em class="property">class </em><code class="sig-prename descclassname">ProcessImage.</code><code class="sig-name descname">ProcessedImage</code><span class="sig-paren">(</span><em class="sig-param">frame</em>, <em class="sig-param">x_middle</em>, <em class="sig-param">y_middle</em><span class="sig-paren">)</span><a class="headerlink" href="#ProcessImage.ProcessedImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The data of the processed image frame, which is calculated from face and eye positions.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="NodShakeMode.html"
+                        title="previous chapter">NodShakeMode module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ProcessImage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="NodShakeMode.html" title="NodShakeMode module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >src</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sarah El-Sherbiny.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

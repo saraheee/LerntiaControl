@@ -15,8 +15,8 @@ class NodShakeMode:
         """
         The constructor that sets the initialization parameters for the 2-gestures mode.
 
-        :param prev_data:
-        :param data:
+        :param prev_data:  the data of previous frames
+        :param data: the data of the active frame
         """
         self.prev_data = prev_data
         self.data = data
