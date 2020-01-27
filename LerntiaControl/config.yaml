@@ -1,15 +1,22 @@
 [sensitivity]
-x_sens = 0.7 # sensitivity in x direction
-y_sens = 0.9 # sensitivity in y direction
+x_sens = 0.7 # [FLOAT] sensitivity in x direction (in normal mode)
+y_sens = 0.9 # [FLOAT] sensitivity in y direction (in normal mode)
 
 [steps]
-x_step = 1.3 # movement steps in x direction 
-y_step = 1.5 # movement steps in y direction
+x_step = 1.3 # [FLOAT] movement steps in x direction (in normal mode)
+y_step = 1.5 # [FLOAT] movement steps in y direction (in normal mode)
 
 [frames]
-numf = 10 # for mouse movement
-clickf = 10 # for click detection
+numf = 10 # [INT] for mouse movement (in normal mode)
+clickf = 10 # [INT] for click detection (in normal mode)
+
+[mouse]
+center_mouse = 0 # [BOOL] if 0 the mouse is centered only once on application start, else it is centered after every left click performed during the application (in normal mode)
 
 [mode]
-nod_shake_mode = 0 # the mode to start the application with (if 0, the application starts in normal mode, else it starts in 2-gestures mode; the mode can also be changed in the ui)
+nod_shake_mode = 0 # [BOOL] the mode to start the application with (if 0, the application starts in normal mode, else it starts in 2-gestures mode; the mode can also be changed in the ui)
 
+[nod_shake_mode]
+numf = 20 # [INT] frame number for nod and shake detection (in 2-gestures mode)
+nod_diff_eps = 150 # [FLOAT] for weighted difference values of head nods (in 2-gestures mode) 
+shake_diff_eps = 200 # [FLOAT] for weighted difference values of head shakes (in 2-gestures mode)

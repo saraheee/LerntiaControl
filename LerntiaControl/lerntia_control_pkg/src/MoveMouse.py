@@ -1,20 +1,20 @@
-import configparser
-import re
-
 from PyQt5 import QtCore
 from PyQt5.QtCore import QRect
 from PyQt5.QtWidgets import QWidget
 from pynput.mouse import Button, Controller
 from win32api import GetSystemMetrics
 
+from FileReader import ConfigFileReader
+
 x_sens = 0.7  # sensitivity in x direction
 y_sens = 0.9  # sensitivity in y direction
 x_step = 1.3  # movement steps in x direction
 y_step = 1.5  # movement steps in y direction
 numf = 10  # frame number for mouse movement
+center_mouse = 0  # center mouse after every left click
 
-pop_eps = 5
-nod_diff_eps = 4
+pop_eps = 5  # shift of the popup window from the cursor to be able to click
+nod_diff_eps = 4  # shift in weighted difference values of head nods for robustness
 mouse_position = (0, 0)
 config_path = r'../../config.yaml'
 
@@ -29,6 +29,7 @@ class MyPopup(QWidget):
         """
         The constructor that sets the initialization parameters for the popup window.
 
+
         """
         QWidget.__init__(self)
 
@@ -39,43 +40,26 @@ def set_config_parameters():
 
     :return: none
     """
-    global x_sens, y_sens, x_step, y_step, numf
-    config_parser = configparser.RawConfigParser()
-    config_parser.read(config_path)
+    global x_sens, y_sens, x_step, y_step, numf, center_mouse
+    f = ConfigFileReader()
 
-    value = get_value(config_parser, 'sensitivity', 'x_sens')
-    if value and float(value) > 0:
-        x_sens = float(value)
+    value = f.read_float('sensitivity', 'x_sens')
+    x_sens = value if value != -1 else x_sens
 
-    value = get_value(config_parser, 'sensitivity', 'y_sens')
-    if value and float(value) > 0:
-        y_sens = float(value)
+    value = f.read_float('sensitivity', 'y_sens')
+    y_sens = value if value != -1 else y_sens
 
-    value = get_value(config_parser, 'steps', 'x_step')
-    if value and float(value) > 0:
-        x_step = float(value)
+    value = f.read_float('steps', 'x_step')
+    x_step = value if value != -1 else x_step
 
-    value = get_value(config_parser, 'steps', 'y_step')
-    if value and float(value) > 0:
-        y_step = float(value)
+    value = f.read_float('steps', 'y_step')
+    y_step = value if value != -1 else y_step
 
-    value = get_value(config_parser, 'frames', 'numf')
-    if value and int(value) > 0:
-        numf = int(value)
+    value = f.read_int('frames', 'numf')
+    numf = value if value != -1 else numf
 
-
-def get_value(parser, section, var):
-    """
-    Get a value from the config file.
-
-    :param parser: the parser of the config file
-    :param section: the section that contains the entry
-    :param var: the variable that holds the value
-    :return: the retrieved value
-    """
-    value = parser.get(section, var)
-    value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
-    return value
+    value = f.read_bool('mouse', 'center_mouse')
+    center_mouse = value if value != -1 else center_mouse
 
 
 class MoveMouse:
@@ -219,8 +203,9 @@ class MoveMouse:
         if self.nod_detected:
             self.mouse.click(Button.left, 1)
             print("nod detected!")
-            self.center_mouse()
             self.w.setStyleSheet("background-color: darkgreen;")
+            if center_mouse:
+                self.center_mouse()
 
         else:
             print("no nod")

@@ -10,14 +10,9 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
-#sys.path.insert(0, os.path.abspath('.'))
-# sys.path.insert(0, os.path.abspath('C:/Users/Sarah/Desktop/Uni/AA-Aktuell-WS29/CVSP-VO+UE/Repo/LerntiaControl/Doc/sphinx/source'))
-sys.path.insert(0, os.path.abspath('C:/Users/Sarah/Desktop/Uni/AA-Aktuell-WS20/CVSP-VO+UE/Repo/LerntiaControl/Doc/sphinx/source'))
-#sys.path.insert(2, os.path.abspath('C:/Users/Sarah/Desktop/Uni/AA-Aktuell-WS29/CVSP-VO+UE/Repo/LerntiaControl/Doc/sphinx/source/lerntia_control_pkg'))
-#sys.path.insert(1, os.path.abspath('C:/Users/Sarah/Desktop/Uni/AA-Aktuell-WS29/CVSP-VO+UE/Repo/LerntiaControl/Doc/sphinx/source/src'))
-#sys.path.insert(1, os.path.abspath('C:/Users/Sarah/Desktop/Uni/AA-Aktuell-WS29/CVSP-VO+UE/Repo/LerntiaControl/lerntia_control_pkg/src'))
+# import os
+# import sys
+# sys.path.insert(0, os.path.abspath('<path to source folder with rst and py files>'))
 
 # -- Project information -----------------------------------------------------
 

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 # Form implementation generated from reading ui file 'ui\MainWindow.ui'
-import configparser
-import re
 import sys
-
 import cv2
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
@@ -14,6 +11,8 @@ from imutils.video import FPS
 from MoveMouse import MoveMouse
 from NodShakeMode import NodShakeMode
 from ProcessImage import ProcessImage
+from FileReader import ConfigFileReader
+import FileReader
 
 default_image = '../icon/control-teaser'
 
@@ -26,10 +25,6 @@ net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_3
 
 # number of frames for click detection
 clickf = 10
-
-# path of the configuration file
-config_path = r'../../config.yaml'
-css = "../ui/style.css"
 
 nod_shake_mode = False
 started = False
@@ -48,41 +43,24 @@ def set_config_parameters():
     :return: none
     """
     global clickf, nod_shake_mode
-    config_parser = configparser.RawConfigParser()
-    config_parser.read(config_path)
+    f = ConfigFileReader()
 
-    value = get_value(config_parser, 'frames', 'clickf')
-    if value and int(value) > 0:
-        clickf = int(value)
+    value = f.read_int('frames', 'clickf')
+    clickf = value if value != -1 else clickf
 
-    value = get_value(config_parser, 'mode', 'nod_shake_mode')
-    nod_shake_mode = bool(int(value))
+    value = f.read_bool('mode', 'nod_shake_mode')
+    nod_shake_mode = value if value != -1 else nod_shake_mode
 
 
-def set_style_sheet(widget):
+def set_style():
     """
-    Set style sheet for a widget.
+    Set style sheet for ui elements.
 
-    :param widget: the widget to be styled
     :return: none
     """
-    with open(css, "r") as fh:
-        widget.setStyleSheet(fh.read())
-    fh.close()
-
-
-def get_value(parser, section, var):
-    """
-    Get a value from the config file.
-
-    :param parser: the parser of the config file
-    :param section: the section that contains the entry
-    :param var: the variable that holds the value
-    :return: the retrieved value
-    """
-    value = parser.get(section, var)
-    value = re.search(r"[-+]?\d*\.\d+|\d+", value).group()
-    return value
+    FileReader.set_style_sheet(ui.central_widget)
+    FileReader.set_style_sheet(ui.start_button)
+    FileReader.set_style_sheet(ui.menu_bar)
 
 
 def on_click():
@@ -97,11 +75,13 @@ def on_click():
     if not started:
         activate_start_button()
 
-        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)  # connect to usb camera
-        # cap = cv2.VideoCapture('../model/test.mp4')
+        # connect to usb camera
+        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         if not cap.isOpened():
             print("WARNING: Failed to connect to usb camera! Connecting to internal camera instead.")
-            cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)  # connect to internal camera
+
+            # connect to internal camera
+            cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
             if not cap.isOpened():
                 print("ERROR: Failed to connect to internal camera!")
                 return
@@ -325,9 +305,7 @@ class Ui_MainWindow(object):
         self.retranslate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
         set_config_parameters()
-        set_style_sheet(self.central_widget)
-        set_style_sheet(self.start_button)
-        set_style_sheet(self.menu_bar)
+        set_style()
 
     def retranslate_ui(self, main_window):
         """

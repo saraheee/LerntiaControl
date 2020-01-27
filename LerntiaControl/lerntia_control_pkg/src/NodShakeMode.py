@@ -1,8 +1,29 @@
 from pynput.keyboard import Key, Controller
 
-num_frames = 20
-nod_diff_eps = 150
-shake_diff_eps = 200
+from FileReader import ConfigFileReader
+
+numf = 20  # frame number for nod and shake detection
+nod_diff_eps = 150  # shift in weighted difference values of head nods
+shake_diff_eps = 200  # shift in weighted difference values of head shakes
+
+
+def set_config_parameters():
+    """
+    Set config parameters for the 2-gestures mode.
+
+    :return: none
+    """
+    global numf, nod_diff_eps, shake_diff_eps
+    f = ConfigFileReader()
+
+    value = f.read_int('nod_shake_mode', 'numf')
+    numf = value if value != -1 else numf
+
+    value = f.read_int('nod_shake_mode', 'nod_diff_eps')
+    nod_diff_eps = value if value != -1 else nod_diff_eps
+
+    value = f.read_int('nod_shake_mode', 'shake_diff_eps')
+    shake_diff_eps = value if value != -1 else shake_diff_eps
 
 
 class NodShakeMode:
@@ -23,6 +44,7 @@ class NodShakeMode:
         self.nod_detected = False
         self.shake_detected = False
         self.keyboard = Controller()
+        set_config_parameters()
 
     def set_data(self, prev_data, data):
         """
@@ -43,7 +65,7 @@ class NodShakeMode:
         :return: none
         """
         if self.prev_data and self.data:
-            last_frames = self.prev_data[-num_frames:]
+            last_frames = self.prev_data[-numf:]
 
             # weighted difference values
             x_differences = []
@@ -53,8 +75,8 @@ class NodShakeMode:
                 x_differences.append(abs(self.data.x_middle - d.x_middle))
                 y_differences.append(abs(self.data.y_middle - d.y_middle))
 
-            self.shake_detected = sum(x_differences) > sum(y_differences) + shake_diff_eps
-            self.nod_detected = sum(y_differences) > sum(x_differences) + nod_diff_eps
+            self.shake_detected = sum(x_differences) > sum(y_differences) + abs(shake_diff_eps)
+            self.nod_detected = sum(y_differences) > sum(x_differences) + abs(nod_diff_eps)
 
             # print("x differences: ", sum(x_differences))
             # print("y differences: ", sum(y_differences))
