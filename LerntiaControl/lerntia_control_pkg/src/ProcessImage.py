@@ -71,12 +71,6 @@ class ProcessImage:
             if left_ex < sys.maxsize:
                 cv2.rectangle(roi, (left_ex, left_ey), (left_ex + left_ew, left_ey + left_eh), (0, 0, 255), 4)
 
-            # cut face and eye out of the image
-            cut_face = self.frame[y:y + h, x:x + w]
-            cut_eye = cut_face[left_ey:left_ey + left_eh, left_ex:left_ex + left_ew]
-            if cut_eye.size:
-                cv2.imshow("cut_eye", cut_eye)
-
         return ProcessedImage(self.frame, left_ex, left_ey)
 
     def detect_face_and_eyes_enhanced(self, net, eye_classifier):
@@ -95,10 +89,6 @@ class ProcessImage:
         right_ew = 0
         left_eh = 0
         right_eh = 0
-
-        cut_face = self.frame
-        cut_left_eye = self.frame
-        cut_right_eye = self.frame
 
         (h, w) = self.frame.shape[:2]
         blob = cv2.dnn.blobFromImage(cv2.resize(self.frame, (300, 300)), 1.0, (300, 300), (104.0, 177.0, 123.0))
@@ -126,7 +116,6 @@ class ProcessImage:
                 # right face half
                 cv2.rectangle(self.frame, (startX + int((endX - startX) / 2) - face_eps, startY), (endX, endY),
                               face_right_color, 4)
-                # cv2.rectangle(self.frame, (x, y), (x + w, y + h), face_color, 4)
 
                 faces.append([startX, startY, endX - startX, endY - startY])
                 left_faces.append(
@@ -158,12 +147,6 @@ class ProcessImage:
             if left_ex < sys.maxsize:
                 cv2.rectangle(roi, (left_ex, left_ey), (left_ex + left_ew, left_ey + left_eh), face_left_color, 4)
 
-            # cut face and eye out of the image
-            cut_left_face = self.frame[y:y + h, x:x + w]
-            cut_left_eye = cut_left_face[left_ey:left_ey + left_eh, left_ex:left_ex + left_ew]
-            if cut_left_eye.size:
-                cv2.imshow("left_eye", cut_left_eye)
-
         # for right eye
         right_ex = 0
         x_right_face = 0
@@ -187,12 +170,6 @@ class ProcessImage:
                 cv2.rectangle(roi, (right_ex, right_ey), (right_ex + right_ew, right_ey + right_eh), face_right_color,
                               4)
 
-            # cut face and eye out of the image
-            cut_right_face = self.frame[y:y + h, x:x + w]
-            cut_right_eye = cut_right_face[right_ey:right_ey + right_eh, right_ex:right_ex + right_ew]
-            if cut_right_eye.size:
-                cv2.imshow("right_eye", cut_right_eye)
-
         global middle_point
         if left_ex < sys.maxsize and right_ex > 0:
 
@@ -206,7 +183,6 @@ class ProcessImage:
 
             middle_point = int(round((left_point[0] + right_point[0]) / 2)), int(round((left_point[1] + right_point[1])
                                                                                        / 2))
-            # cv2.imshow("cut_face: ", cut_face)
         else:
             if len(faces) > 0:
                 for (x, y, w, h) in faces:  # relevant only if a face but no eyes are recognized

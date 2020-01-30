@@ -198,7 +198,6 @@ class MoveMouse:
             y_differences.append(abs(self.data.y_middle - d.y_middle))
 
         self.nod_detected = sum(y_differences) > sum(x_differences) + nod_diff_eps
-        print("y differences: ", sum(y_differences))
 
         if self.nod_detected:
             self.mouse.click(Button.left, 1)

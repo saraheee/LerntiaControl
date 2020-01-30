@@ -2,8 +2,9 @@ src
 ===
 
 .. toctree::
-   :maxdepth: 8
+   :maxdepth: 4
 
+   FileReader
    MainWindow
    MoveMouse
    NodShakeMode

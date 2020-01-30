@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>FileReader module &#8212; LerntiaControl  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MainWindow module" href="MainWindow.html" />
+    <link rel="prev" title="src" href="modules.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MainWindow.html" title="MainWindow module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="src"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">src</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-FileReader">
+<span id="filereader-module"></span><h1>FileReader module<a class="headerlink" href="#module-FileReader" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="FileReader.ConfigFileReader">
+<em class="property">class </em><code class="sig-prename descclassname">FileReader.</code><code class="sig-name descname">ConfigFileReader</code><a class="headerlink" href="#FileReader.ConfigFileReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for retrieving values from config files.</p>
+<dl class="method">
+<dt id="FileReader.ConfigFileReader.get_value">
+<code class="sig-name descname">get_value</code><span class="sig-paren">(</span><em class="sig-param">section</em>, <em class="sig-param">var</em><span class="sig-paren">)</span><a class="headerlink" href="#FileReader.ConfigFileReader.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a value from the config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – the section that contains the entry</p></li>
+<li><p><strong>var</strong> – the variable that holds the value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the retrieved value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="FileReader.ConfigFileReader.read_bool">
+<code class="sig-name descname">read_bool</code><span class="sig-paren">(</span><em class="sig-param">section</em>, <em class="sig-param">var</em><span class="sig-paren">)</span><a class="headerlink" href="#FileReader.ConfigFileReader.read_bool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read bool value from config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – the section that contains the entry</p></li>
+<li><p><strong>var</strong> – the variable that holds the value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the bool value read, or <cite>-1</cite> if no value is found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="FileReader.ConfigFileReader.read_float">
+<code class="sig-name descname">read_float</code><span class="sig-paren">(</span><em class="sig-param">section</em>, <em class="sig-param">var</em><span class="sig-paren">)</span><a class="headerlink" href="#FileReader.ConfigFileReader.read_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read float value from config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – the section that contains the entry</p></li>
+<li><p><strong>var</strong> – the variable that holds the value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the absolute value of the float value read, or <cite>-1</cite> if no value is found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="FileReader.ConfigFileReader.read_int">
+<code class="sig-name descname">read_int</code><span class="sig-paren">(</span><em class="sig-param">section</em>, <em class="sig-param">var</em><span class="sig-paren">)</span><a class="headerlink" href="#FileReader.ConfigFileReader.read_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read int value from config file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>section</strong> – the section that contains the entry</p></li>
+<li><p><strong>var</strong> – the variable that holds the value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the absolute value of the int value read, or <cite>-1</cite> if no value is found</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="FileReader.set_style_sheet">
+<code class="sig-prename descclassname">FileReader.</code><code class="sig-name descname">set_style_sheet</code><span class="sig-paren">(</span><em class="sig-param">widget</em><span class="sig-paren">)</span><a class="headerlink" href="#FileReader.set_style_sheet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set style sheet for a widget.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>widget</strong> – the widget to be styled</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">src</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="MainWindow.html"
+                        title="next chapter">MainWindow module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/FileReader.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="MainWindow.html" title="MainWindow module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="src"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">LerntiaControl  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >src</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Sarah El-Sherbiny.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.1.
+    </div>
+  </body>
+</html>

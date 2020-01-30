@@ -25,6 +25,8 @@ net = cv2.dnn.readNetFromCaffe('../model/deploy.prototxt.txt', '../model/res10_3
 
 # number of frames for click detection
 clickf = 10
+usb_port = 0  # port of the usb camera or the first camera to connect to
+internal_port = 1  # port of the internal camera or the second camera to connect to, if the first connection fails
 
 nod_shake_mode = False
 started = False
@@ -42,7 +44,7 @@ def set_config_parameters():
 
     :return: none
     """
-    global clickf, nod_shake_mode
+    global clickf, nod_shake_mode, usb_port, internal_port
     f = ConfigFileReader()
 
     value = f.read_int('frames', 'clickf')
@@ -50,6 +52,12 @@ def set_config_parameters():
 
     value = f.read_bool('mode', 'nod_shake_mode')
     nod_shake_mode = value if value != -1 else nod_shake_mode
+
+    value = f.read_int('camera', 'usb_port')
+    usb_port = value if value != -1 else usb_port
+
+    value = f.read_int('camera', 'internal_port')
+    internal_port = value if value != -1 else internal_port
 
 
 def set_style():
@@ -76,12 +84,12 @@ def on_click():
         activate_start_button()
 
         # connect to usb camera
-        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        cap = cv2.VideoCapture(usb_port, cv2.CAP_DSHOW)
         if not cap.isOpened():
             print("WARNING: Failed to connect to usb camera! Connecting to internal camera instead.")
 
             # connect to internal camera
-            cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+            cap = cv2.VideoCapture(internal_port, cv2.CAP_DSHOW)
             if not cap.isOpened():
                 print("ERROR: Failed to connect to internal camera!")
                 return

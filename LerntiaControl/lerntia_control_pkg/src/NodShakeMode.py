@@ -5,6 +5,7 @@ from FileReader import ConfigFileReader
 numf = 20  # frame number for nod and shake detection
 nod_diff_eps = 150  # shift in weighted difference values of head nods
 shake_diff_eps = 200  # shift in weighted difference values of head shakes
+nothing_num = 5  # number of times nothing is detected before a nod or shake is recognized
 
 
 def set_config_parameters():
@@ -43,6 +44,7 @@ class NodShakeMode:
         self.data = data
         self.nod_detected = False
         self.shake_detected = False
+        self.nothing = nothing_num
         self.keyboard = Controller()
         set_config_parameters()
 
@@ -78,19 +80,22 @@ class NodShakeMode:
             self.shake_detected = sum(x_differences) > sum(y_differences) + abs(shake_diff_eps)
             self.nod_detected = sum(y_differences) > sum(x_differences) + abs(nod_diff_eps)
 
-            # print("x differences: ", sum(x_differences))
-            # print("y differences: ", sum(y_differences))
-
-        if self.nod_detected:
+        if self.nothing >= nothing_num and self.nod_detected:
             print("nod detected!")
             # click and go to next button
             self.keyboard.press(Key.space)
+            self.keyboard.release(Key.space)
             self.keyboard.press(Key.tab)
+            self.keyboard.release(Key.tab)
+            self.nothing = 0
 
-        elif self.shake_detected:
+        if self.nothing >= nothing_num and self.shake_detected:
             print("shake detected!")
             # go to next button
             self.keyboard.press(Key.tab)
+            self.keyboard.release(Key.tab)
+            self.nothing = 0
 
-        # else:
-        # print("nothing detected")
+        else:
+            # print("nothing detected")
+            self.nothing = self.nothing + 1

@@ -37,7 +37,7 @@ class ConfigFileReader(object):
 
         :param section: the section that contains the entry
         :param var: the variable that holds the value
-        :return: abs of the int value read, or -1 if no value is found
+        :return: the absolute value of the int value read, or `-1` if no value is found
         """
         value = self.get_value(section, var)
         return abs(int(value)) if value else -1
@@ -48,7 +48,7 @@ class ConfigFileReader(object):
 
         :param section: the section that contains the entry
         :param var: the variable that holds the value
-        :return: the float value read, or -1 if no value is found
+        :return: the absolute value of the float value read, or `-1` if no value is found
         """
         value = self.get_value(section, var)
         return abs(float(value)) if value else -1
@@ -59,7 +59,7 @@ class ConfigFileReader(object):
 
         :param section: the section that contains the entry
         :param var: the variable that holds the value
-        :return: the bool value read, or -1 if no value is found
+        :return: the bool value read, or `-1` if no value is found
         """
         value = self.get_value(section, var)
         return abs(bool(int(value))) if value else -1

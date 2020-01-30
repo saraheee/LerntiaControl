@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="lerntia_control_pkg-saraheee",
-    version="5.0.0",
+    version="6.0.0",
     author="Sarah El-Sherbiny",
     author_email="sarah.el-sherbiny@tuwien.ac.at",
     description="Mouse control by tracking face and eyes",
