@@ -1,5 +1,5 @@
 imutils==0.5.3
 numpy==1.22.0
-opencv-python==4.2.0.32
+opencv-python==4.8.1.78
 pynput==1.6.6
 PyQt5==5.14.1
